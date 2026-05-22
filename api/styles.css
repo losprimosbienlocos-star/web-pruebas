@@ -1,0 +1,128 @@
+body{
+    font-family: 'Montserrat', sans-serif;
+}
+
+.material-symbols-outlined{
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+.hero-section{
+    height: 340px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-overlay{
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(3,37,29,.9),
+        rgba(3,37,29,.2)
+    );
+}
+
+.label-form{
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: block;
+    color: #03251d;
+}
+
+.input-form{
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    padding: 14px;
+    outline: none;
+    transition: .3s;
+}
+
+.input-form:focus{
+    border-color: #326b00;
+    box-shadow: 0 0 0 4px rgba(50,107,0,.1);
+}
+
+.card-option{
+    border: 1px solid #d1d5db;
+    padding: 14px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: .3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+}
+
+.card-option:hover{
+    border-color: #326b00;
+    background: #f4fff0;
+}
+
+.curso-card{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #d1d5db;
+    border-radius: 16px;
+    padding: 18px;
+    transition: .3s;
+    cursor: pointer;
+    background: #f9fafb;
+}
+
+.curso-card:hover{
+    border-color: #326b00;
+    transform: translateY(-2px);
+}
+
+.checkbox-custom{
+    width: 20px;
+    height: 20px;
+}
+
+.btn-submit{
+    width: 100%;
+    background: #03251d;
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 14px;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: .3s;
+}
+
+.btn-submit:hover{
+    background: #326b00;
+    transform: translateY(-2px);
+}
+
+.sidebar-card-primary{
+    background: #03251d;
+    color: white;
+    padding: 30px;
+    border-radius: 24px;
+}
+
+@media(max-width:768px){
+
+    .hero-section{
+        height: 260px;
+    }
+
+    .hero-section h2{
+        font-size: 36px;
+    }
+
+}
