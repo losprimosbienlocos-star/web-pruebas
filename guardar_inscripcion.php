@@ -1,6 +1,6 @@
 <?php
 
-require_once "../conexion.php";
+require_once "conexion.php";
 
 $mysqli = conectar();
 
@@ -115,7 +115,7 @@ $mysqli->close();
 // REDIRECCIONAR
 // =====================================
 
-header("Location: formulario_inscripcion.php?ok=1");
+header("Location: index.php?ok=1");
 
 exit();
 
