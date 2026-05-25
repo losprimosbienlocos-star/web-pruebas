@@ -82,7 +82,7 @@ $resultCursos = $mysqli->query($sqlCursos);
 <section class="hero-section relative">
 
     <img
-        src="../css/images/formulario.jpeg"
+        src="css/images/formulario.jpeg"
         class="absolute inset-0 w-full h-full object-cover"
     >
 
@@ -430,7 +430,7 @@ $resultCursos = $mysqli->query($sqlCursos);
             <div class="bg-white rounded-2xl shadow-md overflow-hidden">
 
                 <img
-                    src="../css/images/cengi.png"
+                    src="css/images/cengi.png"
                     class="w-40 mx-auto object-contain py-4"
                 >
 
