@@ -10,6 +10,10 @@
       "handle": "filesystem"
     },
     {
+      "src": "/registros.php",
+      "dest": "/api/registros.php"
+    },
+    {
       "src": "/guardar_inscripcion.php",
       "dest": "/api/guardar_inscripcion.php"
     },

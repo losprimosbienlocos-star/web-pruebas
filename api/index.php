@@ -436,10 +436,15 @@ $resultCursos = $mysqli->query($sqlCursos);
 
                 <div class="p-5">
 
-                    <h3 class="font-bold text-xl text-primary mb-2">
+                    <h3 class="font-bold text-xl text-primary mb-4">
                         CENGICAÑA DIGITAL 
                         PARA INSCRIBIRTE A LOS CURSOS QUE QUIERAS
                     </h3>
+
+                    <a href="registros.php" class="w-full py-3 bg-secondary text-white font-bold rounded-xl hover:bg-opacity-95 transition flex items-center justify-center gap-2 shadow-md hover:scale-[1.02] transform duration-150">
+                        <span class="material-symbols-outlined text-sm">visibility</span>
+                        Ver Solicitudes Recibidas
+                    </a>
 
                 </div>
 
