@@ -7,12 +7,15 @@
   },
   "routes":[
     {
-      "src":"/",
-      "dest":"/api/index.php"
+      "handle": "filesystem"
     },
     {
-      "src":"/(.*)",
-      "dest":"/api/$1"
+      "src": "/guardar_inscripcion.php",
+      "dest": "/api/guardar_inscripcion.php"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.php"
     }
   ]
 }
