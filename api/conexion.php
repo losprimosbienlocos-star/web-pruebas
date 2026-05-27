@@ -7,9 +7,28 @@ function env_value($name, $default = '')
     return trim((string) $value, " \t\n\r\0\x0B\"'");
 }
 
+function normalize_supabase_url($value)
+{
+    $url = trim((string) $value, " \t\n\r\0\x0B\"'");
+
+    if (stripos($url, 'SUPABASE_URL=') === 0) {
+        $url = substr($url, strlen('SUPABASE_URL='));
+    }
+
+    $url = trim($url, " \t\n\r\0\x0B\"'");
+    $url = preg_replace('#/rest/v1/?$#', '', $url);
+    $url = rtrim($url, '/');
+
+    if ($url !== '' && !preg_match('#^https?://#i', $url)) {
+        $url = 'https://' . $url;
+    }
+
+    return $url;
+}
+
 function supabase_config()
 {
-    $url = rtrim(preg_replace('#/rest/v1/?$#', '', env_value('SUPABASE_URL')), '/');
+    $url = normalize_supabase_url(env_value('SUPABASE_URL'));
     $key = env_value('SUPABASE_SERVICE_ROLE_KEY')
         ?: env_value('SUPABASE_ANON_KEY')
         ?: env_value('SUPABASE_PUBLISHABLE_KEY');
