@@ -2,17 +2,26 @@
 
 function env_value($name, $default = '')
 {
-    return $_ENV[$name] ?? $_SERVER[$name] ?? getenv($name) ?: $default;
+    $value = $_ENV[$name] ?? $_SERVER[$name] ?? getenv($name) ?: $default;
+
+    return trim((string) $value, " \t\n\r\0\x0B\"'");
 }
 
 function supabase_config()
 {
-    $url = rtrim(env_value('SUPABASE_URL'), '/');
-    $key = env_value('SUPABASE_SERVICE_ROLE_KEY') ?: env_value('SUPABASE_ANON_KEY');
+    $url = rtrim(preg_replace('#/rest/v1/?$#', '', env_value('SUPABASE_URL')), '/');
+    $key = env_value('SUPABASE_SERVICE_ROLE_KEY')
+        ?: env_value('SUPABASE_ANON_KEY')
+        ?: env_value('SUPABASE_PUBLISHABLE_KEY');
 
     if ($url === '' || $key === '') {
         http_response_code(500);
-        die('Faltan SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY en las variables de entorno.');
+        die('Faltan SUPABASE_URL y SUPABASE_PUBLISHABLE_KEY en las variables de entorno.');
+    }
+
+    if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        http_response_code(500);
+        die('SUPABASE_URL no tiene un formato valido.');
     }
 
     return [$url, $key];
@@ -31,6 +40,11 @@ function supabase_request($path, $method = 'GET', $body = null, $headers = [])
     ];
 
     $ch = curl_init($endpoint);
+    if ($ch === false) {
+        http_response_code(500);
+        die('No se pudo inicializar la conexion con Supabase.');
+    }
+
     curl_setopt_array($ch, [
         CURLOPT_CUSTOMREQUEST => $method,
         CURLOPT_RETURNTRANSFER => true,
@@ -60,9 +74,31 @@ function supabase_request($path, $method = 'GET', $body = null, $headers = [])
     return json_decode($response, true) ?: [];
 }
 
+function supabase_query_string($query)
+{
+    if (is_array($query)) {
+        return http_build_query($query, '', '&', PHP_QUERY_RFC3986);
+    }
+
+    $query = trim((string) $query);
+    if ($query === '') {
+        return '';
+    }
+
+    $parts = [];
+    foreach (explode('&', $query) as $pair) {
+        [$key, $value] = array_pad(explode('=', $pair, 2), 2, '');
+        $parts[] = rawurlencode($key) . '=' . rawurlencode($value);
+    }
+
+    return implode('&', $parts);
+}
+
 function supabase_table($table, $query = '')
 {
-    return rawurlencode($table) . ($query !== '' ? '?' . $query : '');
+    $queryString = supabase_query_string($query);
+
+    return rawurlencode($table) . ($queryString !== '' ? '?' . $queryString : '');
 }
 
 function conectar()

@@ -7,7 +7,7 @@ Proyecto PHP desplegable en Vercel y conectado a Supabase.
 Configura estas variables en Vercel:
 
 - `SUPABASE_URL`: `https://nccwvlopsqsctutopiks.supabase.co`
-- `SUPABASE_SERVICE_ROLE_KEY`: clave server-side del proyecto Supabase
+- `SUPABASE_PUBLISHABLE_KEY`: publishable key del proyecto Supabase
 
 ## Base de datos
 
