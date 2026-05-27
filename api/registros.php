@@ -55,7 +55,7 @@ $mysqli->close();
                     <span class="material-symbols-outlined text-secondary text-3xl">dashboard</span>
                     <h1 class="text-2xl md:text-3xl font-extrabold text-primary">Control de Solicitudes</h1>
                 </div>
-                <p class="text-gray-500 text-sm mt-1">Monitoreo en tiempo real de inscripciones registradas en la nube de Aiven.</p>
+                <p class="text-gray-500 text-sm mt-1">Monitoreo en tiempo real de inscripciones registradas en Supabase.</p>
             </div>
             
             <div class="flex gap-3">

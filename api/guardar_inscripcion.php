@@ -4,25 +4,24 @@ require_once "conexion.php";
 
 $mysqli = conectar();
 
-
 // =====================================
 // RECIBIR DATOS
 // =====================================
 
-$nombre_participante = $_POST['nombre_participante'];
+$nombre_participante = trim($_POST['nombre_participante'] ?? '');
 
-$cui_participante = $_POST['cui_participante'];
+$cui_participante = trim($_POST['cui_participante'] ?? '');
 
-$puesto_participante = $_POST['puesto_participante'];
+$puesto_participante = trim($_POST['puesto_participante'] ?? '');
 
-$area_participante = $_POST['area_participante'];
+$area_participante = trim($_POST['area_participante'] ?? '');
 
-$correo = $_POST['correo'];
+$correo = trim($_POST['correo'] ?? '');
 
-$telefono = $_POST['telefono'];
+$telefono = trim($_POST['telefono'] ?? '');
 
 $ingenio_id = !empty($_POST['ingenio_id'])
-    ? $_POST['ingenio_id']
+    ? (int) $_POST['ingenio_id']
     : NULL;
 
 
@@ -30,9 +29,14 @@ $ingenio_id = !empty($_POST['ingenio_id'])
 // ARRAY DE CURSOS
 // =====================================
 
-$cursos = $_POST['curso_id'];
+$cursos = array_map('intval', $_POST['curso_id'] ?? []);
 
-$tipo_pago = $_POST['tipo_pago'];
+$tipo_pago = trim($_POST['tipo_pago'] ?? '');
+
+if ($nombre_participante === '' || $cui_participante === '' || empty($cursos) || $tipo_pago === '') {
+    http_response_code(400);
+    die('Faltan datos obligatorios para registrar la inscripción.');
+}
 
 
 // =====================================
