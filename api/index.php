@@ -2,36 +2,35 @@
 
 require_once "conexion.php";
 
-$mysqli = conectar();
-
-
 // =====================================
 // OBTENER INGENIOS
 // =====================================
 
-$sqlIngenios = "SELECT * FROM ingenios ORDER BY nombre_ingenios ASC";
-$resultIngenios = $mysqli->query($sqlIngenios);
+$ingenios = supabase_request(
+    supabase_table('ingenios', 'select=*&order=nombre_ingenios.asc')
+);
 
 
 // =====================================
 // FILTRO TIPO
 // =====================================
 
-$tipo = isset($_GET['tipo']) ? $_GET['tipo'] : 'Curso';
+$tiposPermitidos = ['Curso', 'Diplomado', 'Seminario'];
+$tipo = isset($_GET['tipo']) && in_array($_GET['tipo'], $tiposPermitidos, true)
+    ? $_GET['tipo']
+    : 'Curso';
 
 
 // =====================================
 // OBTENER CURSOS SEGUN TIPO
 // =====================================
 
-$sqlCursos = "
-    SELECT *
-    FROM cursos
-    WHERE tipo = '$tipo'
-    ORDER BY nombre_cursos ASC
-";
-
-$resultCursos = $mysqli->query($sqlCursos);
+$cursos = supabase_request(
+    supabase_table(
+        'cursos',
+        'select=*&tipo=eq.' . rawurlencode($tipo) . '&order=nombre_cursos.asc'
+    )
+);
 
 ?>
 
@@ -238,7 +237,7 @@ $resultCursos = $mysqli->query($sqlCursos);
 
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
 
-                        <?php while($ingenio = $resultIngenios->fetch_assoc()): ?>
+                        <?php foreach($ingenios as $ingenio): ?>
 
                             <label class="card-option">
 
@@ -250,12 +249,12 @@ $resultCursos = $mysqli->query($sqlCursos);
                                 >
 
                                 <span>
-                                    <?= $ingenio['nombre_ingenios'] ?>
+                                    <?= htmlspecialchars($ingenio['nombre_ingenios']) ?>
                                 </span>
 
                             </label>
 
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
 
                     </div>
 
@@ -307,7 +306,7 @@ $resultCursos = $mysqli->query($sqlCursos);
                     </label>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <?php while($curso = $resultCursos->fetch_assoc()): ?>
+                        <?php foreach($cursos as $curso): ?>
 
                             <label class="curso-card">
 
@@ -320,7 +319,7 @@ $resultCursos = $mysqli->query($sqlCursos);
                                     <div>
 
                                         <p class="font-bold text-primary">
-                                            <?= $curso['nombre_cursos'] ?>
+                                            <?= htmlspecialchars($curso['nombre_cursos']) ?>
                                         </p>
 
                                     </div>
@@ -336,7 +335,7 @@ $resultCursos = $mysqli->query($sqlCursos);
 
                             </label>
 
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
 
                     </div>
 
