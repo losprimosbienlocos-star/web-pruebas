@@ -75,9 +75,36 @@ function toggleOtroIngenio() {
     }
 }
 
+function setTipoCapacitacion(tipo) {
+    const label = document.getElementById("tipoCursoLabel");
+
+    if (label) {
+        label.textContent = tipo;
+    }
+
+    document.querySelectorAll(".curso-card").forEach((card) => {
+        const visible = card.dataset.cursoTipo === tipo;
+        card.classList.toggle("hidden", !visible);
+
+        if (!visible) {
+            const checkbox = card.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = false;
+            }
+        }
+    });
+
+    document.querySelectorAll(".tipo-capacitacion-btn").forEach((button) => {
+        const active = button.dataset.tipoCapacitacion === tipo;
+        button.classList.toggle("ring-4", active);
+        button.classList.toggle("ring-primary/20", active);
+    });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     restoreFormDraft();
     toggleOtroIngenio();
+    setTipoCapacitacion(document.getElementById("tipoCursoLabel")?.textContent.trim() || "Curso");
 
     document.querySelectorAll('input[name="ingenio_id"]').forEach((radio) => {
         radio.addEventListener("change", function () {
@@ -86,8 +113,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    document.querySelectorAll('a[href^="?tipo="]').forEach((link) => {
-        link.addEventListener("click", saveFormDraft);
+    document.querySelectorAll(".tipo-capacitacion-btn").forEach((button) => {
+        button.addEventListener("click", function () {
+            setTipoCapacitacion(this.dataset.tipoCapacitacion);
+            saveFormDraft();
+        });
     });
 
     form?.addEventListener("input", saveFormDraft);

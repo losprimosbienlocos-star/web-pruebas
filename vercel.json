@@ -10,6 +10,10 @@
       "handle": "filesystem"
     },
     {
+      "src": "/admin/?",
+      "dest": "/api/registros.php"
+    },
+    {
       "src": "/registros.php",
       "dest": "/api/registros.php"
     },
