@@ -10,6 +10,17 @@ $ingenios = supabase_request(
     supabase_table('ingenios', 'select=*&order=nombre_ingenios.asc')
 );
 
+usort($ingenios, function ($a, $b) {
+    $aEsOtros = strtolower(trim($a['nombre_ingenios'] ?? '')) === 'otros';
+    $bEsOtros = strtolower(trim($b['nombre_ingenios'] ?? '')) === 'otros';
+
+    if ($aEsOtros === $bEsOtros) {
+        return strcasecmp($a['nombre_ingenios'] ?? '', $b['nombre_ingenios'] ?? '');
+    }
+
+    return $aEsOtros ? 1 : -1;
+});
+
 
 // =====================================
 // FILTRO TIPO
@@ -241,10 +252,13 @@ $cursos = supabase_request(
 
                             <label class="card-option">
 
+                                <?php $esOtros = strtolower(trim($ingenio['nombre_ingenios'] ?? '')) === 'otros'; ?>
+
                                 <input
                                     type="radio"
                                     name="ingenio_id"
                                     value="<?= $ingenio['id'] ?>"
+                                    data-ingenio-otros="<?= $esOtros ? '1' : '0' ?>"
                                     required
                                 >
 
@@ -256,6 +270,20 @@ $cursos = supabase_request(
 
                         <?php endforeach; ?>
 
+                    </div>
+
+                    <div id="otroIngenioContainer" class="mt-4 hidden">
+                        <label class="label-form">
+                            Especifique el ingenio
+                        </label>
+
+                        <input
+                            type="text"
+                            name="otro_ingenio"
+                            id="otro_ingenio"
+                            class="input-form"
+                            placeholder="Ingrese el nombre del ingenio"
+                        >
                     </div>
 
                 </div>

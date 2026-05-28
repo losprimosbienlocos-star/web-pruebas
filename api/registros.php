@@ -99,7 +99,13 @@ $mysqli->close();
                                     </td>
                                     <td class="p-4">
                                         <span class="px-2.5 py-1 bg-green-50 text-secondary font-bold rounded-lg text-xs">
-                                            <?= htmlspecialchars($row['ingenio'] ?? 'No especificado') ?>
+                                            <?php
+                                                $ingenio = $row['ingenio'] ?? 'No especificado';
+                                                if (strtolower(trim($ingenio)) === 'otros' && !empty($row['otro_ingenio'])) {
+                                                    $ingenio .= ' - ' . $row['otro_ingenio'];
+                                                }
+                                            ?>
+                                            <?= htmlspecialchars($ingenio) ?>
                                         </span>
                                     </td>
                                     <td class="p-4 text-gray-600 text-xs">
