@@ -147,7 +147,7 @@ $cursos = supabase_request(
 
                     <div>
                         <label class="label-form">
-                            Nombre Participante
+                            Nombre completo
                         </label>
 
                         <input
@@ -160,7 +160,8 @@ $cursos = supabase_request(
 
                     <div>
                         <label class="label-form">
-                            CUI Participante
+                            No. de Identificación Personal
+                            Número de Identificación Personal del País
                         </label>
 
                         <input
@@ -179,7 +180,7 @@ $cursos = supabase_request(
 
                     <div>
                         <label class="label-form">
-                            Puesto Participante
+                            Puesto de trabajo
                         </label>
 
                         <input
@@ -192,7 +193,7 @@ $cursos = supabase_request(
 
                     <div>
                         <label class="label-form">
-                            Área Participante
+                            Área de Trabajo
                         </label>
 
                         <input
@@ -211,7 +212,7 @@ $cursos = supabase_request(
 
                     <div>
                         <label class="label-form">
-                            Correo
+                            Correo electrónico
                         </label>
 
                         <input
@@ -224,7 +225,7 @@ $cursos = supabase_request(
 
                     <div>
                         <label class="label-form">
-                            Teléfono
+                            No. de teléfono
                         </label>
 
                         <input
@@ -381,7 +382,7 @@ $cursos = supabase_request(
                 <div class="mt-8">
 
                     <label class="label-form mb-3 block">
-                        Tipo Pago
+                        Responsable de pago
                     </label>
 
                     <select
