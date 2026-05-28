@@ -197,6 +197,7 @@ alter table public.solicitudes_inscripcion enable row level security;
 
 create policy "lectura publica ingenios" on public.ingenios for select to anon, authenticated using (true);
 create policy "lectura publica cursos" on public.cursos for select to anon, authenticated using (true);
+create policy "lectura publica solicitudes" on public.solicitudes_inscripcion for select to anon, authenticated using (true);
 create policy "insert publico solicitudes" on public.solicitudes_inscripcion for insert to anon, authenticated with check (true);
 
 grant usage on schema public to anon, authenticated, service_role;
