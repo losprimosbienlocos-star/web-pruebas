@@ -19,6 +19,19 @@ $area_participante = trim($_POST['area_participante'] ?? '');
 $correo = trim($_POST['correo'] ?? '');
 
 $telefono = trim($_POST['telefono'] ?? '');
+$pais = trim($_POST['pais'] ?? '');
+
+$grado_academico_id = !empty($_POST['grado_academico_id'])
+    ? (int) $_POST['grado_academico_id']
+    : NULL;
+
+$ha_participado_antes = isset($_POST['ha_participado_antes'])
+    ? (int) $_POST['ha_participado_antes']
+    : 0;
+
+$cursos_participados = trim($_POST['cursos_participados'] ?? '');
+
+$como_se_entero = trim($_POST['como_se_entero'] ?? '');
 $otro_ingenio = trim($_POST['otro_ingenio'] ?? '');
 
 $ingenio_id = !empty($_POST['ingenio_id'])
@@ -72,6 +85,11 @@ INSERT INTO solicitudes_inscripcion
     area_participante,
     correo,
     telefono,
+    pais,
+    grado_academico_id,
+    ha_participado_antes,
+    cursos_participados,
+    como_se_entero,
     ingenio_id,
     otro_ingenio,
     curso_id,
@@ -79,10 +97,9 @@ INSERT INTO solicitudes_inscripcion
 
 )
 
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 
 ";
-
 
 // =====================================
 // RECORRER CURSOS
@@ -92,20 +109,27 @@ foreach($cursos as $curso_id){
 
     $stmt = $mysqli->prepare($sql);
 
-    $stmt->bind_param(
+$stmt->bind_param(
 
-        "ssssssisis",
+    "sssssssisssisis",
 
-        $nombre_participante,
-        $cui_participante,
-        $puesto_participante,
-        $area_participante,
-        $correo,
-        $telefono,
-        $ingenio_id,
-        $otro_ingenio,
-        $curso_id,
-        $tipo_pago
+    $nombre_participante,
+    $cui_participante,
+    $puesto_participante,
+    $area_participante,
+    $correo,
+    $telefono,
+    $pais,
+    $grado_academico_id,
+    $ha_participado_antes,
+    $cursos_participados,
+    $como_se_entero,
+    $ingenio_id,
+    $otro_ingenio,
+    $curso_id,
+    $tipo_pago
+
+);
 
     );
 
@@ -153,6 +177,34 @@ if (!empty($cursos)) {
 $ingenioResumen = $ingenioName;
 if (strtolower(trim($ingenioName)) === 'otros' && $otro_ingenio !== '') {
     $ingenioResumen .= ' - ' . $otro_ingenio;
+}
+
+$gradoAcademico = 'No especificado';
+
+if (!empty($grado_academico_id)) {
+
+    $stmtGrado = $mysqli->prepare(
+        "SELECT nombre_grado 
+         FROM grado_academico 
+         WHERE id = ?"
+    );
+
+    $stmtGrado->bind_param(
+        'i',
+        $grado_academico_id
+    );
+
+    $stmtGrado->execute();
+
+    $resGrado = $stmtGrado->get_result();
+
+    if ($row = $resGrado->fetch_assoc()) {
+
+        $gradoAcademico =
+            $row['nombre_grado'];
+    }
+
+    $stmtGrado->close();
 }
 
 $mysqli->close();
@@ -261,6 +313,58 @@ $mysqli->close();
                 <span class="text-gray-500 text-sm font-medium">Contacto:</span>
                 <span class="col-span-2 text-gray-700 text-sm"><?= htmlspecialchars($correo) ?> / <?= htmlspecialchars($telefono) ?></span>
             </div>
+
+            <div class="grid grid-cols-3 gap-2 py-2 border-b border-gray-100">
+    <span class="text-gray-500 text-sm font-medium">País:</span>
+    <span class="col-span-2 text-gray-700 text-sm">
+        <?= htmlspecialchars($pais) ?>
+    </span>
+</div>
+
+<div class="grid grid-cols-3 gap-2 py-2 border-b border-gray-100">
+    <span class="text-gray-500 text-sm font-medium">Grado:</span>
+    <span class="col-span-2 text-gray-700 text-sm">
+        <?= htmlspecialchars($gradoAcademico) ?>
+    </span>
+</div>
+
+<div class="grid grid-cols-3 gap-2 py-2 border-b border-gray-100">
+    <span class="text-gray-500 text-sm font-medium">
+        Participó Antes:
+    </span>
+
+    <span class="col-span-2 text-gray-700 text-sm">
+        <?= $ha_participado_antes ? 'Sí' : 'No' ?>
+    </span>
+</div>
+
+<?php if ($ha_participado_antes && $cursos_participados !== ''): ?>
+
+<div class="grid grid-cols-3 gap-2 py-2 border-b border-gray-100">
+
+    <span class="text-gray-500 text-sm font-medium">
+        Cursos Anteriores:
+    </span>
+
+    <span class="col-span-2 text-gray-700 text-sm">
+        <?= nl2br(htmlspecialchars($cursos_participados)) ?>
+    </span>
+
+</div>
+
+<?php endif; ?>
+
+<div class="grid grid-cols-3 gap-2 py-2 border-b border-gray-100">
+
+    <span class="text-gray-500 text-sm font-medium">
+        Se Enteró Por:
+    </span>
+
+    <span class="col-span-2 text-gray-700 text-sm">
+        <?= htmlspecialchars($como_se_entero) ?>
+    </span>
+
+</div>
 
             <div class="grid grid-cols-3 gap-2 py-2 border-b border-gray-100">
                 <span class="text-gray-500 text-sm font-medium">Tipo Pago:</span>
