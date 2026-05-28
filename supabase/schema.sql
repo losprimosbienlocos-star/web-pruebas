@@ -146,6 +146,7 @@ create table public.solicitudes_inscripcion (
   correo varchar(255),
   telefono varchar(20),
   ingenio_id integer references public.ingenios(id),
+  otro_ingenio varchar(255),
   curso_id integer references public.cursos(id),
   tipo_pago public.tipo_pago_enum,
   estado public.estado_solicitud_enum default 'Pendiente',

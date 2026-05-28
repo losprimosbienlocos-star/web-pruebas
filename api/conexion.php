@@ -1,5 +1,36 @@
 <?php
 
+function load_local_env()
+{
+    $root = dirname(__DIR__);
+    $files = [$root . '/.env.local', $root . '/.env'];
+
+    foreach ($files as $file) {
+        if (!is_readable($file)) {
+            continue;
+        }
+
+        foreach (file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+            $line = trim($line);
+            if ($line === '' || $line[0] === '#') {
+                continue;
+            }
+
+            [$name, $value] = array_pad(explode('=', $line, 2), 2, '');
+            $name = trim($name);
+            $value = trim($value, " \t\n\r\0\x0B\"'");
+
+            if ($name !== '' && getenv($name) === false) {
+                putenv($name . '=' . $value);
+                $_ENV[$name] = $value;
+                $_SERVER[$name] = $value;
+            }
+        }
+    }
+}
+
+load_local_env();
+
 function env_value($name, $default = '')
 {
     $value = $_ENV[$name] ?? $_SERVER[$name] ?? getenv($name) ?: $default;
@@ -227,8 +258,9 @@ class SupabaseStatement
                 'correo' => $this->params[4] ?? '',
                 'telefono' => $this->params[5] ?? '',
                 'ingenio_id' => isset($this->params[6]) ? (int) $this->params[6] : null,
-                'curso_id' => isset($this->params[7]) ? (int) $this->params[7] : null,
-                'tipo_pago' => $this->params[8] ?? '',
+                'otro_ingenio' => $this->params[7] ?? null,
+                'curso_id' => isset($this->params[8]) ? (int) $this->params[8] : null,
+                'tipo_pago' => $this->params[9] ?? '',
             ];
 
             supabase_request(

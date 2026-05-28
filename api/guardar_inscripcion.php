@@ -19,6 +19,7 @@ $area_participante = trim($_POST['area_participante'] ?? '');
 $correo = trim($_POST['correo'] ?? '');
 
 $telefono = trim($_POST['telefono'] ?? '');
+$otro_ingenio = trim($_POST['otro_ingenio'] ?? '');
 
 $ingenio_id = !empty($_POST['ingenio_id'])
     ? (int) $_POST['ingenio_id']
@@ -39,6 +40,23 @@ if ($nombre_participante === '' || $cui_participante === '' || empty($cursos) ||
 }
 
 
+$ingenioName = "No especificado";
+if (!empty($ingenio_id)) {
+    $stmtIng = $mysqli->prepare("SELECT nombre_ingenios FROM ingenios WHERE id = ?");
+    $stmtIng->bind_param('i', $ingenio_id);
+    $stmtIng->execute();
+    $resIng = $stmtIng->get_result();
+    if ($row = $resIng->fetch_assoc()) {
+        $ingenioName = $row['nombre_ingenios'];
+    }
+    $stmtIng->close();
+}
+
+if (strtolower(trim($ingenioName)) === 'otros' && $otro_ingenio === '') {
+    http_response_code(400);
+    die('Debe especificar el nombre del ingenio.');
+}
+
 // =====================================
 // SQL
 // =====================================
@@ -55,12 +73,13 @@ INSERT INTO solicitudes_inscripcion
     correo,
     telefono,
     ingenio_id,
+    otro_ingenio,
     curso_id,
     tipo_pago
 
 )
 
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 
 ";
 
@@ -75,7 +94,7 @@ foreach($cursos as $curso_id){
 
     $stmt->bind_param(
 
-        "sssssssis",
+        "ssssssisis",
 
         $nombre_participante,
         $cui_participante,
@@ -84,6 +103,7 @@ foreach($cursos as $curso_id){
         $correo,
         $telefono,
         $ingenio_id,
+        $otro_ingenio,
         $curso_id,
         $tipo_pago
 
@@ -130,16 +150,9 @@ if (!empty($cursos)) {
     $stmtCursos->close();
 }
 
-$ingenioName = "No especificado";
-if (!empty($ingenio_id)) {
-    $stmtIng = $mysqli->prepare("SELECT nombre_ingenios FROM ingenios WHERE id = ?");
-    $stmtIng->bind_param('i', $ingenio_id);
-    $stmtIng->execute();
-    $resIng = $stmtIng->get_result();
-    if ($row = $resIng->fetch_assoc()) {
-        $ingenioName = $row['nombre_ingenios'];
-    }
-    $stmtIng->close();
+$ingenioResumen = $ingenioName;
+if (strtolower(trim($ingenioName)) === 'otros' && $otro_ingenio !== '') {
+    $ingenioResumen .= ' - ' . $otro_ingenio;
 }
 
 $mysqli->close();
@@ -241,7 +254,7 @@ $mysqli->close();
 
             <div class="grid grid-cols-3 gap-2 py-2 border-b border-gray-100">
                 <span class="text-gray-500 text-sm font-medium">Ingenio:</span>
-                <span class="col-span-2 text-gray-700 text-sm"><?= htmlspecialchars($ingenioName) ?></span>
+                <span class="col-span-2 text-gray-700 text-sm"><?= htmlspecialchars($ingenioResumen) ?></span>
             </div>
 
             <div class="grid grid-cols-3 gap-2 py-2 border-b border-gray-100">
