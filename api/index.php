@@ -31,6 +31,16 @@ $tipo = isset($_GET['tipo']) && in_array($_GET['tipo'], $tiposPermitidos, true)
     ? $_GET['tipo']
     : 'Curso';
 
+// =====================================
+// OBTENER GRADOS ACADEMICOS
+// =====================================
+
+$gradosAcademicos = supabase_request(
+    supabase_table(
+        'grado_academico',
+        'select=*&order=nombre_grado.asc'
+    )
+);
 
 // =====================================
 // OBTENER CURSOS SEGUN TIPO
@@ -239,6 +249,159 @@ $cursos = supabase_request(
                 </div>
 
 
+                <!-- PAIS Y GRADO ACADEMICO -->
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
+
+    <div>
+        <label class="label-form">
+            País
+        </label>
+
+        <input
+            type="text"
+            name="pais"
+            class="input-form"
+            required
+        >
+    </div>
+
+    <div>
+        <label class="label-form">
+            Grado Académico
+        </label>
+
+        <select
+            name="grado_academico_id"
+            class="input-form"
+            required
+        >
+
+            <option value="">
+                Seleccione
+            </option>
+
+            <?php foreach($gradosAcademicos as $grado): ?>
+
+                <option value="<?= $grado['id'] ?>">
+                    <?= htmlspecialchars($grado['nombre_grado']) ?>
+                </option>
+
+            <?php endforeach; ?>
+
+        </select>
+    </div>
+
+</div>
+
+
+<!-- PARTICIPO ANTES -->
+
+<div class="mt-6">
+
+    <label class="label-form mb-3 block">
+        ¿Ha participado anteriormente en cursos?
+    </label>
+
+    <div class="flex gap-6">
+
+        <label class="flex items-center gap-2">
+
+            <input
+                type="radio"
+                name="ha_participado_antes"
+                value="1"
+                required
+            >
+
+            <span>Sí</span>
+
+        </label>
+
+        <label class="flex items-center gap-2">
+
+            <input
+                type="radio"
+                name="ha_participado_antes"
+                value="0"
+                required
+                checked
+            >
+
+            <span>No</span>
+
+        </label>
+
+    </div>
+
+</div>
+
+
+<!-- CURSOS PARTICIPADOS -->
+
+<div
+    id="cursosParticipadosContainer"
+    class="mt-5 hidden"
+>
+
+    <label class="label-form">
+        ¿En qué cursos ha participado?
+    </label>
+
+    <textarea
+        name="cursos_participados"
+        id="cursos_participados"
+        rows="4"
+        class="input-form"
+        placeholder="Ejemplo: Seguridad Industrial, Liderazgo, Calderas..."
+    ></textarea>
+
+</div>
+
+
+<!-- COMO SE ENTERO -->
+
+<div class="mt-6">
+
+    <label class="label-form mb-3 block">
+        ¿Cómo se enteró del curso?
+    </label>
+
+    <select
+        name="como_se_entero"
+        class="input-form"
+        required
+    >
+
+        <option value="">
+            Seleccione
+        </option>
+
+        <option value="Correo">
+            Correo
+        </option>
+
+        <option value="Redes Sociales">
+            Redes Sociales
+        </option>
+
+        <option value="Página Web">
+            Página Web
+        </option>
+
+        <option value="Recomendación">
+            Recomendación
+        </option>
+
+        <option value="Comunidad">
+            Comunidad
+        </option>
+
+    </select>
+
+</div>
+
+                
                 <!-- INGENIOS -->
 
                 <div class="mt-6">
