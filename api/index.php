@@ -39,7 +39,7 @@ $tipo = isset($_GET['tipo']) && in_array($_GET['tipo'], $tiposPermitidos, true)
 $cursos = supabase_request(
     supabase_table(
         'cursos',
-        'select=*&tipo=eq.' . rawurlencode($tipo) . '&order=nombre_cursos.asc'
+        'select=*&order=nombre_cursos.asc'
     )
 );
 
@@ -299,26 +299,29 @@ $cursos = supabase_request(
 
                     <div class="flex flex-wrap gap-3">
 
-                        <a
-                            href="?tipo=Curso"
-                            class="px-5 py-2 rounded-xl bg-green-600 text-white font-semibold shadow hover:scale-105 transition"
+                        <button
+                            type="button"
+                            data-tipo-capacitacion="Curso"
+                            class="tipo-capacitacion-btn px-5 py-2 rounded-xl bg-green-600 text-white font-semibold shadow hover:scale-105 transition"
                         >
                             Cursos
-                        </a>
+                        </button>
 
-                        <a
-                            href="?tipo=Diplomado"
-                            class="px-5 py-2 rounded-xl bg-blue-600 text-white font-semibold shadow hover:scale-105 transition"
+                        <button
+                            type="button"
+                            data-tipo-capacitacion="Diplomado"
+                            class="tipo-capacitacion-btn px-5 py-2 rounded-xl bg-blue-600 text-white font-semibold shadow hover:scale-105 transition"
                         >
                             Diplomados
-                        </a>
+                        </button>
 
-                        <a
-                            href="?tipo=Seminario"
-                            class="px-5 py-2 rounded-xl bg-yellow-500 text-white font-semibold shadow hover:scale-105 transition"
+                        <button
+                            type="button"
+                            data-tipo-capacitacion="Seminario"
+                            class="tipo-capacitacion-btn px-5 py-2 rounded-xl bg-yellow-500 text-white font-semibold shadow hover:scale-105 transition"
                         >
                             Seminarios
-                        </a>
+                        </button>
 
                     </div>
 
@@ -329,14 +332,17 @@ $cursos = supabase_request(
 
                 <div class="mt-8">
 
-                    <label class="label-form mb-4 block">
+                    <label id="tipoCursoLabel" class="label-form mb-4 block">
                         <?= $tipo ?>
                     </label>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<div id="cursosContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <?php foreach($cursos as $curso): ?>
 
-                            <label class="curso-card">
+                            <label
+                                class="curso-card <?= ($curso['tipo'] ?? '') === $tipo ? '' : 'hidden' ?>"
+                                data-curso-tipo="<?= htmlspecialchars($curso['tipo'] ?? '') ?>"
+                            >
 
                                 <div class="flex items-center gap-3">
 
