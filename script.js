@@ -3,6 +3,7 @@ const btn = document.getElementById("btnEnviar");
 const storageKey = "cengicursosFormDraft";
 
 function collectFormDraft() {
+
     if (!form) {
         return {};
     }
@@ -11,6 +12,7 @@ function collectFormDraft() {
     const formData = new FormData(form);
 
     for (const [key, value] of formData.entries()) {
+
         if (key === "curso_id[]") {
             continue;
         }
@@ -22,34 +24,51 @@ function collectFormDraft() {
 }
 
 function saveFormDraft() {
-    sessionStorage.setItem(storageKey, JSON.stringify(collectFormDraft()));
+    sessionStorage.setItem(
+        storageKey,
+        JSON.stringify(collectFormDraft())
+    );
 }
 
 function restoreFormDraft() {
+
     if (!form) {
         return;
     }
 
     const raw = sessionStorage.getItem(storageKey);
+
     if (!raw) {
         return;
     }
 
     let data = {};
+
     try {
+
         data = JSON.parse(raw);
+
     } catch (error) {
+
         sessionStorage.removeItem(storageKey);
+
         return;
     }
 
     Object.entries(data).forEach(([name, value]) => {
-        const fields = Array.from(form.elements).filter((field) => field.name === name);
+
+        const fields = Array.from(form.elements).filter(
+            (field) => field.name === name
+        );
 
         fields.forEach((field) => {
+
             if (field.type === "radio") {
+
                 field.checked = field.value === value;
+
             } else {
+
                 field.value = value;
             }
         });
@@ -57,17 +76,31 @@ function restoreFormDraft() {
 }
 
 function toggleOtroIngenio() {
-    const container = document.getElementById("otroIngenioContainer");
-    const inputOtro = document.getElementById("otro_ingenio");
-    const selected = document.querySelector('input[name="ingenio_id"]:checked');
+
+    const container = document.getElementById(
+        "otroIngenioContainer"
+    );
+
+    const inputOtro = document.getElementById(
+        "otro_ingenio"
+    );
+
+    const selected = document.querySelector(
+        'input[name="ingenio_id"]:checked'
+    );
 
     if (!container || !inputOtro) {
         return;
     }
 
-    const esOtros = selected?.dataset.ingenioOtros === "1";
+    const esOtros =
+        selected?.dataset.ingenioOtros === "1";
 
-    container.classList.toggle("hidden", !esOtros);
+    container.classList.toggle(
+        "hidden",
+        !esOtros
+    );
+
     inputOtro.required = esOtros;
 
     if (!esOtros) {
@@ -75,68 +108,229 @@ function toggleOtroIngenio() {
     }
 }
 
+
+// ======================================
+// MOSTRAR CURSOS PARTICIPADOS
+// ======================================
+
+function toggleCursosParticipados() {
+
+    const cursosParticipadosContainer =
+        document.getElementById(
+            "cursosParticipadosContainer"
+        );
+
+    const cursosParticipados =
+        document.getElementById(
+            "cursos_participados"
+        );
+
+    const seleccionado = document.querySelector(
+        'input[name="ha_participado_antes"]:checked'
+    );
+
+    if (
+        !cursosParticipadosContainer ||
+        !cursosParticipados
+    ) {
+        return;
+    }
+
+    const mostrar =
+        seleccionado?.value === "1";
+
+    cursosParticipadosContainer.classList.toggle(
+        "hidden",
+        !mostrar
+    );
+
+    cursosParticipados.required = mostrar;
+
+    if (!mostrar) {
+        cursosParticipados.value = "";
+    }
+}
+
+
+// ======================================
+// TIPO CAPACITACION
+// ======================================
+
 function setTipoCapacitacion(tipo) {
-    const label = document.getElementById("tipoCursoLabel");
+
+    const label = document.getElementById(
+        "tipoCursoLabel"
+    );
 
     if (label) {
         label.textContent = tipo;
     }
 
-    document.querySelectorAll(".curso-card").forEach((card) => {
-        const visible = card.dataset.cursoTipo === tipo;
-        card.classList.toggle("hidden", !visible);
+    document.querySelectorAll(".curso-card")
+        .forEach((card) => {
 
-        if (!visible) {
-            const checkbox = card.querySelector('input[type="checkbox"]');
-            if (checkbox) {
-                checkbox.checked = false;
+            const visible =
+                card.dataset.cursoTipo === tipo;
+
+            card.classList.toggle(
+                "hidden",
+                !visible
+            );
+
+            if (!visible) {
+
+                const checkbox = card.querySelector(
+                    'input[type="checkbox"]'
+                );
+
+                if (checkbox) {
+                    checkbox.checked = false;
+                }
             }
-        }
-    });
+        });
 
-    document.querySelectorAll(".tipo-capacitacion-btn").forEach((button) => {
-        const active = button.dataset.tipoCapacitacion === tipo;
-        button.classList.toggle("ring-4", active);
-        button.classList.toggle("ring-primary/20", active);
-    });
+    document.querySelectorAll(".tipo-capacitacion-btn")
+        .forEach((button) => {
+
+            const active =
+                button.dataset.tipoCapacitacion === tipo;
+
+            button.classList.toggle(
+                "ring-4",
+                active
+            );
+
+            button.classList.toggle(
+                "ring-primary/20",
+                active
+            );
+        });
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    restoreFormDraft();
-    toggleOtroIngenio();
-    setTipoCapacitacion(document.getElementById("tipoCursoLabel")?.textContent.trim() || "Curso");
 
-    document.querySelectorAll('input[name="ingenio_id"]').forEach((radio) => {
-        radio.addEventListener("change", function () {
-            toggleOtroIngenio();
-            saveFormDraft();
+// ======================================
+// DOM READY
+// ======================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        restoreFormDraft();
+
+        toggleOtroIngenio();
+
+        toggleCursosParticipados();
+
+        setTipoCapacitacion(
+            document.getElementById(
+                "tipoCursoLabel"
+            )?.textContent.trim() || "Curso"
+        );
+
+
+        // ======================================
+        // INGENIOS
+        // ======================================
+
+        document.querySelectorAll(
+            'input[name="ingenio_id"]'
+        ).forEach((radio) => {
+
+            radio.addEventListener(
+                "change",
+                function () {
+
+                    toggleOtroIngenio();
+
+                    saveFormDraft();
+                }
+            );
         });
-    });
 
-    document.querySelectorAll(".tipo-capacitacion-btn").forEach((button) => {
-        button.addEventListener("click", function () {
-            setTipoCapacitacion(this.dataset.tipoCapacitacion);
-            saveFormDraft();
+
+        // ======================================
+        // PARTICIPO ANTES
+        // ======================================
+
+        document.querySelectorAll(
+            'input[name="ha_participado_antes"]'
+        ).forEach((radio) => {
+
+            radio.addEventListener(
+                "change",
+                function () {
+
+                    toggleCursosParticipados();
+
+                    saveFormDraft();
+                }
+            );
         });
-    });
 
-    form?.addEventListener("input", saveFormDraft);
-    form?.addEventListener("change", saveFormDraft);
-});
 
-form?.addEventListener("submit", function () {
-    sessionStorage.removeItem(storageKey);
+        // ======================================
+        // BOTONES TIPO
+        // ======================================
 
-    if (!btn) {
-        return;
+        document.querySelectorAll(
+            ".tipo-capacitacion-btn"
+        ).forEach((button) => {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    setTipoCapacitacion(
+                        this.dataset.tipoCapacitacion
+                    );
+
+                    saveFormDraft();
+                }
+            );
+        });
+
+
+        // ======================================
+        // AUTOGUARDADO
+        // ======================================
+
+        form?.addEventListener(
+            "input",
+            saveFormDraft
+        );
+
+        form?.addEventListener(
+            "change",
+            saveFormDraft
+        );
     }
+);
 
-    btn.innerHTML = `
-        <span class="material-symbols-outlined animate-spin">
-            sync
-        </span>
-        Enviando...
-    `;
 
-    btn.disabled = true;
-});
+// ======================================
+// SUBMIT
+// ======================================
+
+form?.addEventListener(
+    "submit",
+    function () {
+
+        sessionStorage.removeItem(
+            storageKey
+        );
+
+        if (!btn) {
+            return;
+        }
+
+        btn.innerHTML = `
+            <span class="material-symbols-outlined animate-spin">
+                sync
+            </span>
+            Enviando...
+        `;
+
+        btn.disabled = true;
+    }
+);
