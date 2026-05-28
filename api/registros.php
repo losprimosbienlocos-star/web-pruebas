@@ -49,7 +49,8 @@ function excel_column_name($index)
 function xlsx_cell($column, $row, $value, $style = 0)
 {
     $reference = excel_column_name($column) . $row;
-    $value = htmlspecialchars((string) $value, ENT_XML1 | ENT_COMPAT, 'UTF-8');
+    $value = preg_replace('/[^\x09\x0A\x0D\x20-\x{D7FF}\x{E000}-\x{FFFD}]/u', '', (string) $value);
+    $value = htmlspecialchars($value, ENT_XML1 | ENT_COMPAT | ENT_SUBSTITUTE, 'UTF-8');
     $styleAttribute = $style > 0 ? ' s="' . $style . '"' : '';
 
     return '<c r="' . $reference . '" t="inlineStr"' . $styleAttribute . '><is><t>' . $value . '</t></is></c>';
@@ -119,7 +120,9 @@ function build_excel_download($solicitudes)
     $sheetXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
         . '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" '
         . 'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
-        . '<sheetViews><sheetView workbookViewId="0"><pane ySplit="2" topLeftCell="A3" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>'
+        . '<dimension ref="A1:' . $lastColumn . $lastRow . '"/>'
+        . '<sheetViews><sheetView workbookViewId="0"/></sheetViews>'
+        . '<sheetFormatPr defaultRowHeight="15"/>'
         . '<cols>'
         . '<col min="1" max="1" width="10" customWidth="1"/>'
         . '<col min="2" max="2" width="18" customWidth="1"/>'
@@ -129,8 +132,6 @@ function build_excel_download($solicitudes)
         . '<col min="9" max="12" width="20" customWidth="1"/>'
         . '</cols>'
         . '<sheetData>' . implode('', $sheetRows) . '</sheetData>'
-        . '<mergeCells count="1"><mergeCell ref="A1:' . $lastColumn . '1"/></mergeCells>'
-        . '<autoFilter ref="A2:' . $lastColumn . $lastRow . '"/>'
         . '</worksheet>';
 
     $tempFile = tempnam(sys_get_temp_dir(), 'cengicursos-xlsx-');
