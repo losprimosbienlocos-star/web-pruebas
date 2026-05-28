@@ -35,49 +35,66 @@ function nombre_ingenio_solicitud($row)
 }
 
 if (isset($_GET['download']) && $_GET['download'] === 'excel') {
-    $filename = 'solicitudes-cengicursos-' . date('Y-m-d') . '.csv';
+    $filename = 'solicitudes-cengicursos-' . date('Y-m-d') . '.xls';
 
-    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Type: application/vnd.ms-excel; charset=utf-8');
     header('Content-Disposition: attachment; filename="' . $filename . '"');
     header('Pragma: no-cache');
     header('Expires: 0');
 
-    $output = fopen('php://output', 'w');
-    fwrite($output, "\xEF\xBB\xBF");
-
-    fputcsv($output, [
-        'ID',
-        'Fecha',
-        'Participante',
-        'CUI',
-        'Ingenio',
-        'Puesto',
-        'Area',
-        'Curso inscrito',
-        'Tipo de pago',
-        'Correo',
-        'Telefono',
-        'Estado',
-    ]);
-
-    foreach ($solicitudes as $row) {
-        fputcsv($output, [
-            $row['id_solicitud'] ?? '',
-            !empty($row['fecha_solicitud']) ? date('d/m/Y H:i', strtotime($row['fecha_solicitud'])) : '',
-            $row['nombre_participante'] ?? '',
-            $row['cui_participante'] ?? '',
-            nombre_ingenio_solicitud($row),
-            $row['puesto_participante'] ?? '',
-            $row['area_participante'] ?? '',
-            $row['curso'] ?? 'Desconocido',
-            $row['tipo_pago'] ?? '',
-            $row['correo'] ?? '',
-            $row['telefono'] ?? '',
-            $row['estado'] ?? '',
-        ]);
-    }
-
-    fclose($output);
+    echo "\xEF\xBB\xBF";
+    ?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <style>
+        table { border-collapse: collapse; font-family: Arial, sans-serif; font-size: 12px; }
+        th { background: #03251d; color: #ffffff; font-weight: bold; text-align: left; }
+        th, td { border: 1px solid #b7b7b7; padding: 6px; vertical-align: top; }
+        td.texto { mso-number-format: "\@"; }
+        .titulo { background: #326b00; color: #ffffff; font-size: 16px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td class="titulo" colspan="12">Solicitudes CENGICURSOS</td>
+        </tr>
+        <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Participante</th>
+            <th>CUI</th>
+            <th>Ingenio</th>
+            <th>Puesto</th>
+            <th>Área</th>
+            <th>Curso inscrito</th>
+            <th>Tipo de pago</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Estado</th>
+        </tr>
+        <?php foreach ($solicitudes as $row): ?>
+            <tr>
+                <td><?= htmlspecialchars($row['id_solicitud'] ?? '') ?></td>
+                <td class="texto"><?= htmlspecialchars(!empty($row['fecha_solicitud']) ? date('d/m/Y H:i', strtotime($row['fecha_solicitud'])) : '') ?></td>
+                <td><?= htmlspecialchars($row['nombre_participante'] ?? '') ?></td>
+                <td class="texto"><?= htmlspecialchars($row['cui_participante'] ?? '') ?></td>
+                <td><?= htmlspecialchars(nombre_ingenio_solicitud($row)) ?></td>
+                <td><?= htmlspecialchars($row['puesto_participante'] ?? '') ?></td>
+                <td><?= htmlspecialchars($row['area_participante'] ?? '') ?></td>
+                <td><?= htmlspecialchars($row['curso'] ?? 'Desconocido') ?></td>
+                <td><?= htmlspecialchars($row['tipo_pago'] ?? '') ?></td>
+                <td class="texto"><?= htmlspecialchars($row['correo'] ?? '') ?></td>
+                <td class="texto"><?= htmlspecialchars($row['telefono'] ?? '') ?></td>
+                <td><?= htmlspecialchars($row['estado'] ?? '') ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</body>
+</html>
+    <?php
     exit;
 }
 ?>
