@@ -16,6 +16,70 @@ $sql = "
 
 $result = $mysqli->query($sql);
 $mysqli->close();
+
+$solicitudes = [];
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $solicitudes[] = $row;
+    }
+}
+
+function nombre_ingenio_solicitud($row)
+{
+    $ingenio = $row['ingenio'] ?? 'No especificado';
+    if (strtolower(trim($ingenio)) === 'otros' && !empty($row['otro_ingenio'])) {
+        $ingenio .= ' - ' . $row['otro_ingenio'];
+    }
+
+    return $ingenio;
+}
+
+if (isset($_GET['download']) && $_GET['download'] === 'excel') {
+    $filename = 'solicitudes-cengicursos-' . date('Y-m-d') . '.csv';
+
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    header('Pragma: no-cache');
+    header('Expires: 0');
+
+    $output = fopen('php://output', 'w');
+    fwrite($output, "\xEF\xBB\xBF");
+
+    fputcsv($output, [
+        'ID',
+        'Fecha',
+        'Participante',
+        'CUI',
+        'Ingenio',
+        'Puesto',
+        'Area',
+        'Curso inscrito',
+        'Tipo de pago',
+        'Correo',
+        'Telefono',
+        'Estado',
+    ]);
+
+    foreach ($solicitudes as $row) {
+        fputcsv($output, [
+            $row['id_solicitud'] ?? '',
+            !empty($row['fecha_solicitud']) ? date('d/m/Y H:i', strtotime($row['fecha_solicitud'])) : '',
+            $row['nombre_participante'] ?? '',
+            $row['cui_participante'] ?? '',
+            nombre_ingenio_solicitud($row),
+            $row['puesto_participante'] ?? '',
+            $row['area_participante'] ?? '',
+            $row['curso'] ?? 'Desconocido',
+            $row['tipo_pago'] ?? '',
+            $row['correo'] ?? '',
+            $row['telefono'] ?? '',
+            $row['estado'] ?? '',
+        ]);
+    }
+
+    fclose($output);
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html class="light" lang="es">
@@ -58,7 +122,11 @@ $mysqli->close();
                 <p class="text-gray-500 text-sm mt-1">Monitoreo en tiempo real de inscripciones registradas en Supabase.</p>
             </div>
             
-            <div class="flex gap-3">
+            <div class="flex flex-col sm:flex-row gap-3">
+                <a href="?download=excel" class="px-5 py-2.5 bg-secondary text-white font-bold rounded-xl hover:bg-opacity-95 transition flex items-center justify-center gap-2 shadow-md">
+                    <span class="material-symbols-outlined text-sm">download</span>
+                    Descargar Excel
+                </a>
                 <a href="index.php" class="px-5 py-2.5 bg-primary text-white font-bold rounded-xl hover:bg-opacity-95 transition flex items-center gap-2 shadow-md">
                     <span class="material-symbols-outlined text-sm">add</span>
                     Nueva Inscripción
@@ -84,8 +152,8 @@ $mysqli->close();
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-150 text-sm">
-                        <?php if ($result && $result->num_rows > 0): ?>
-                            <?php while ($row = $result->fetch_assoc()): ?>
+                        <?php if (count($solicitudes) > 0): ?>
+                            <?php foreach ($solicitudes as $row): ?>
                                 <tr class="hover:bg-gray-50 transition">
                                     <td class="p-4 font-bold text-gray-400">#<?= $row['id_solicitud'] ?></td>
                                     <td class="p-4 text-gray-500 text-xs">
@@ -99,13 +167,7 @@ $mysqli->close();
                                     </td>
                                     <td class="p-4">
                                         <span class="px-2.5 py-1 bg-green-50 text-secondary font-bold rounded-lg text-xs">
-                                            <?php
-                                                $ingenio = $row['ingenio'] ?? 'No especificado';
-                                                if (strtolower(trim($ingenio)) === 'otros' && !empty($row['otro_ingenio'])) {
-                                                    $ingenio .= ' - ' . $row['otro_ingenio'];
-                                                }
-                                            ?>
-                                            <?= htmlspecialchars($ingenio) ?>
+                                            <?= htmlspecialchars(nombre_ingenio_solicitud($row)) ?>
                                         </span>
                                     </td>
                                     <td class="p-4 text-gray-600 text-xs">
@@ -125,7 +187,7 @@ $mysqli->close();
                                         <span class="text-gray-400 font-medium"><?= htmlspecialchars($row['telefono']) ?></span>
                                     </td>
                                 </tr>
-                            <?php endwhile; ?>
+                            <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
                                 <td colspan="9" class="p-10 text-center text-gray-400">
