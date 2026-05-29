@@ -428,7 +428,7 @@ $cursos = supabase_request(
                 <div class="mt-6">
 
                     <label class="label-form mb-3 block">
-                        Ingenio
+                        Ingenio/Institucion/Empresa
                     </label>
 
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
