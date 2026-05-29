@@ -111,7 +111,7 @@ foreach($cursos as $curso_id){
 
 $stmt->bind_param(
 
-    "sssssssisssisis",
+    "sssssssiissisis",
 
     $nombre_participante,
     $cui_participante,
@@ -130,8 +130,6 @@ $stmt->bind_param(
     $tipo_pago
 
 );
-
-    );
 
 
 // =====================================

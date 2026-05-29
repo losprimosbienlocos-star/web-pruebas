@@ -199,17 +199,24 @@ class SupabaseCompat
             ));
         }
 
+        if (stripos($sql, 'FROM grado_academico') !== false) {
+            return new SupabaseResult(supabase_request(
+                supabase_table('grado_academico', 'select=*&order=id.asc')
+            ));
+        }
+
         if (stripos($sql, 'FROM solicitudes_inscripcion') !== false) {
             $rows = supabase_request(
                 supabase_table(
                     'solicitudes_inscripcion',
-                    'select=*,ingenios(nombre_ingenios),cursos(nombre_cursos)&order=fecha_solicitud.desc'
+                    'select=*,ingenios(nombre_ingenios),cursos(nombre_cursos),grado_academico(nombre_grado)&order=fecha_solicitud.desc'
                 )
             );
 
             foreach ($rows as &$row) {
                 $row['ingenio'] = $row['ingenios']['nombre_ingenios'] ?? null;
                 $row['curso'] = $row['cursos']['nombre_cursos'] ?? null;
+                $row['grado_academico'] = $row['grado_academico']['nombre_grado'] ?? null;
             }
 
             return new SupabaseResult($rows);
@@ -257,10 +264,15 @@ class SupabaseStatement
                 'area_participante' => $this->params[3] ?? '',
                 'correo' => $this->params[4] ?? '',
                 'telefono' => $this->params[5] ?? '',
-                'ingenio_id' => isset($this->params[6]) ? (int) $this->params[6] : null,
-                'otro_ingenio' => $this->params[7] ?? null,
-                'curso_id' => isset($this->params[8]) ? (int) $this->params[8] : null,
-                'tipo_pago' => $this->params[9] ?? '',
+                'pais' => $this->params[6] ?? '',
+                'grado_academico_id' => isset($this->params[7]) ? (int) $this->params[7] : null,
+                'ha_participado_antes' => !empty($this->params[8]),
+                'cursos_participados' => $this->params[9] ?? '',
+                'como_se_entero' => $this->params[10] ?? '',
+                'ingenio_id' => isset($this->params[11]) ? (int) $this->params[11] : null,
+                'otro_ingenio' => $this->params[12] ?? null,
+                'curso_id' => isset($this->params[13]) ? (int) $this->params[13] : null,
+                'tipo_pago' => $this->params[14] ?? '',
             ];
 
             supabase_request(
@@ -286,6 +298,15 @@ class SupabaseStatement
             $id = isset($this->params[0]) ? (int) $this->params[0] : 0;
             $this->result = supabase_request(
                 supabase_table('ingenios', 'select=nombre_ingenios&id=eq.' . $id . '&limit=1')
+            );
+
+            return true;
+        }
+
+        if (stripos($this->sql, 'FROM grado_academico') !== false) {
+            $id = isset($this->params[0]) ? (int) $this->params[0] : 0;
+            $this->result = supabase_request(
+                supabase_table('grado_academico', 'select=nombre_grado&id=eq.' . $id . '&limit=1')
             );
 
             return true;

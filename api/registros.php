@@ -7,10 +7,12 @@ $sql = "
     SELECT 
         s.*, 
         i.nombre_ingenios AS ingenio, 
-        c.nombre_cursos AS curso 
+        c.nombre_cursos AS curso,
+        g.nombre_grado AS grado_academico
     FROM solicitudes_inscripcion s
     LEFT JOIN ingenios i ON s.ingenio_id = i.id
     LEFT JOIN cursos c ON s.curso_id = c.id
+    LEFT JOIN grado_academico g ON s.grado_academico_id = g.id
     ORDER BY s.fecha_solicitud DESC
 ";
 
@@ -32,6 +34,13 @@ function nombre_ingenio_solicitud($row)
     }
 
     return $ingenio;
+}
+
+function participacion_anterior($row)
+{
+    $valor = $row['ha_participado_antes'] ?? false;
+
+    return ($valor === true || $valor === 1 || $valor === '1' || $valor === 't') ? 'Sí' : 'No';
 }
 
 function excel_column_name($index)
@@ -75,6 +84,11 @@ function build_excel_download($solicitudes)
         'Tipo de pago',
         'Correo',
         'Telefono',
+        'Pais',
+        'Grado academico',
+        'Participo antes',
+        'Cursos anteriores',
+        'Como se entero',
         'Estado',
     ];
 
@@ -92,6 +106,11 @@ function build_excel_download($solicitudes)
             $row['tipo_pago'] ?? '',
             $row['correo'] ?? '',
             $row['telefono'] ?? '',
+            $row['pais'] ?? '',
+            $row['grado_academico'] ?? 'No especificado',
+            participacion_anterior($row),
+            $row['cursos_participados'] ?? '',
+            $row['como_se_entero'] ?? '',
             $row['estado'] ?? '',
         ];
     }
@@ -129,7 +148,7 @@ function build_excel_download($solicitudes)
         . '<col min="3" max="3" width="28" customWidth="1"/>'
         . '<col min="4" max="4" width="18" customWidth="1"/>'
         . '<col min="5" max="8" width="26" customWidth="1"/>'
-        . '<col min="9" max="12" width="20" customWidth="1"/>'
+        . '<col min="9" max="17" width="20" customWidth="1"/>'
         . '</cols>'
         . '<sheetData>' . implode('', $sheetRows) . '</sheetData>'
         . '</worksheet>';
@@ -235,6 +254,9 @@ if (isset($_GET['download']) && $_GET['download'] === 'excel') {
                             <th class="p-4">Ingenio</th>
                             <th class="p-4">Puesto / Área</th>
                             <th class="p-4">Curso Inscrito</th>
+                            <th class="p-4">Datos Académicos</th>
+                            <th class="p-4">Participación</th>
+                            <th class="p-4">Se Enteró Por</th>
                             <th class="p-4">Pago</th>
                             <th class="p-4">Contacto</th>
                         </tr>
@@ -265,6 +287,19 @@ if (isset($_GET['download']) && $_GET['download'] === 'excel') {
                                     <td class="p-4 font-semibold text-primary">
                                         <?= htmlspecialchars($row['curso'] ?? 'Desconocido') ?>
                                     </td>
+                                    <td class="p-4 text-xs text-gray-600">
+                                        <span class="font-bold text-primary"><?= htmlspecialchars($row['grado_academico'] ?? 'No especificado') ?></span><br>
+                                        <span class="text-gray-400 font-medium"><?= htmlspecialchars($row['pais'] ?? 'No especificado') ?></span>
+                                    </td>
+                                    <td class="p-4 text-xs text-gray-600">
+                                        <span class="font-bold text-primary"><?= participacion_anterior($row) ?></span>
+                                        <?php if (participacion_anterior($row) === 'Sí' && !empty($row['cursos_participados'])): ?>
+                                            <br><span class="text-gray-400 font-medium"><?= nl2br(htmlspecialchars($row['cursos_participados'])) ?></span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="p-4 text-xs text-gray-600">
+                                        <?= htmlspecialchars($row['como_se_entero'] ?? 'No especificado') ?>
+                                    </td>
                                     <td class="p-4">
                                         <span class="px-2.5 py-1 <?= $row['tipo_pago'] === 'Ingenio' ? 'bg-blue-50 text-blue-600' : 'bg-purple-50 text-purple-600' ?> font-bold rounded-lg text-xs">
                                             <?= htmlspecialchars($row['tipo_pago']) ?>
@@ -278,7 +313,7 @@ if (isset($_GET['download']) && $_GET['download'] === 'excel') {
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="9" class="p-10 text-center text-gray-400">
+                                <td colspan="12" class="p-10 text-center text-gray-400">
                                     <span class="material-symbols-outlined text-4xl block mb-2">inbox</span>
                                     No hay solicitudes registradas en la base de datos de la nube.
                                 </td>
