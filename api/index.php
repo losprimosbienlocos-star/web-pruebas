@@ -34,17 +34,19 @@ $tipo = isset($_GET['tipo']) && in_array($_GET['tipo'], $tiposPermitidos, true)
 // =====================================
 // OBTENER GRADOS ACADEMICOS
 // =====================================
+
 $responseGrados = supabase_request(
     supabase_table(
         'grado_academico',
-        'select=*&order=nombre_grado.asc'
+        'select=id,nombre_grado&order=id.asc'
     )
 );
+
+$gradosAcademicos = $responseGrados;
 
 if (!is_array($gradosAcademicos)) {
     $gradosAcademicos = [];
 }
-
 // =====================================
 // OBTENER CURSOS SEGUN TIPO
 // =====================================
