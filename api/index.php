@@ -34,13 +34,14 @@ $tipo = isset($_GET['tipo']) && in_array($_GET['tipo'], $tiposPermitidos, true)
 // =====================================
 // OBTENER GRADOS ACADEMICOS
 // =====================================
-
-$gradosAcademicos = supabase_request(
+$responseGrados = supabase_request(
     supabase_table(
         'grado_academico',
         'select=*&order=nombre_grado.asc'
     )
 );
+
+$gradosAcademicos = $responseGrados['data'] ?? $responseGrados ?? [];
 
 // =====================================
 // OBTENER CURSOS SEGUN TIPO
@@ -171,7 +172,9 @@ $cursos = supabase_request(
                     <div>
                         <label class="label-form">
                             No. de Identificación Personal
-                            Número de Identificación Personal del País
+                            <span class="block text-xs text-gray-400 font-normal mt-1">
+                                Número de Identificación Personal del País
+                            </span>
                         </label>
 
                         <input
@@ -271,25 +274,25 @@ $cursos = supabase_request(
             Grado Académico
         </label>
 
-        <select
-            name="grado_academico_id"
-            class="input-form"
-            required
-        >
+       <select
+    name="grado_academico_id"
+    class="input-form"
+    required
+>
 
-            <option value="">
-                Seleccione
-            </option>
+    <option value="">
+        Seleccione
+    </option>
 
-            <?php foreach($gradosAcademicos as $grado): ?>
+    <?php foreach($gradosAcademicos as $grado): ?>
 
-                <option value="<?= $grado['id'] ?>">
-                    <?= htmlspecialchars($grado['nombre_grado']) ?>
-                </option>
+        <option value="<?= $grado['id'] ?>">
+            <?= htmlspecialchars($grado['nombre_grado']) ?>
+        </option>
 
-            <?php endforeach; ?>
+    <?php endforeach; ?>
 
-        </select>
+</select>
     </div>
 
 </div>
