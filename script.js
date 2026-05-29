@@ -12,8 +12,12 @@ function collectFormDraft() {
     const formData = new FormData(form);
 
     for (const [key, value] of formData.entries()) {
-
         if (key === "curso_id[]") {
+            if (!Array.isArray(data[key])) {
+                data[key] = [];
+            }
+
+            data[key].push(value);
             continue;
         }
 
@@ -66,6 +70,12 @@ function restoreFormDraft() {
             if (field.type === "radio") {
 
                 field.checked = field.value === value;
+
+            } else if (field.type === "checkbox") {
+
+                field.checked = Array.isArray(value)
+                    ? value.includes(field.value)
+                    : field.value === value;
 
             } else {
 
@@ -176,17 +186,6 @@ function setTipoCapacitacion(tipo) {
                 "hidden",
                 !visible
             );
-
-            if (!visible) {
-
-                const checkbox = card.querySelector(
-                    'input[type="checkbox"]'
-                );
-
-                if (checkbox) {
-                    checkbox.checked = false;
-                }
-            }
         });
 
     document.querySelectorAll(".tipo-capacitacion-btn")
