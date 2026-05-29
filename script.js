@@ -166,7 +166,43 @@ function toggleCursosParticipados() {
 // TIPO CAPACITACION
 // ======================================
 
+let tipoCapacitacionActual = "";
+
+function normalizarTextoBusqueda(texto) {
+    return (texto || "")
+        .toString()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+}
+
+function filtrarCursos() {
+    const busqueda = normalizarTextoBusqueda(
+        document.getElementById("buscadorCursos")?.value || ""
+    );
+
+    document.querySelectorAll(".curso-card")
+        .forEach((card) => {
+            const nombre = normalizarTextoBusqueda(
+                card.dataset.cursoNombre || card.textContent
+            );
+
+            const coincideTipo =
+                card.dataset.cursoTipo === tipoCapacitacionActual;
+
+            const coincideBusqueda =
+                busqueda === "" || nombre.includes(busqueda);
+
+            card.classList.toggle(
+                "hidden",
+                !(coincideTipo && coincideBusqueda)
+            );
+        });
+}
+
 function setTipoCapacitacion(tipo) {
+    tipoCapacitacionActual = tipo;
 
     const label = document.getElementById(
         "tipoCursoLabel"
@@ -176,17 +212,7 @@ function setTipoCapacitacion(tipo) {
         label.textContent = tipo;
     }
 
-    document.querySelectorAll(".curso-card")
-        .forEach((card) => {
-
-            const visible =
-                card.dataset.cursoTipo === tipo;
-
-            card.classList.toggle(
-                "hidden",
-                !visible
-            );
-        });
+    filtrarCursos();
 
     document.querySelectorAll(".tipo-capacitacion-btn")
         .forEach((button) => {
@@ -288,6 +314,11 @@ document.addEventListener(
                 }
             );
         });
+
+        document.getElementById("buscadorCursos")?.addEventListener(
+            "input",
+            filtrarCursos
+        );
 
 
         // ======================================

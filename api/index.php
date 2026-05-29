@@ -521,12 +521,26 @@ $cursos = supabase_request(
                         <?= $tipo ?>
                     </label>
 
+                    <div class="relative mb-4">
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                            search
+                        </span>
+                        <input
+                            type="search"
+                            id="buscadorCursos"
+                            class="input-form pl-12"
+                            placeholder="Buscar curso, diplomado o seminario"
+                            autocomplete="off"
+                        >
+                    </div>
+
 <div id="cursosContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <?php foreach($cursos as $curso): ?>
 
                             <label
                                 class="curso-card <?= ($curso['tipo'] ?? '') === $tipo ? '' : 'hidden' ?>"
                                 data-curso-tipo="<?= htmlspecialchars($curso['tipo'] ?? '') ?>"
+                                data-curso-nombre="<?= htmlspecialchars(mb_strtolower($curso['nombre_cursos'] ?? '', 'UTF-8')) ?>"
                             >
 
                                 <div class="flex items-center gap-3">
