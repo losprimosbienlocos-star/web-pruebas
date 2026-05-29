@@ -41,7 +41,9 @@ $responseGrados = supabase_request(
     )
 );
 
-$gradosAcademicos = $responseGrados['data'] ?? $responseGrados ?? [];
+if (!is_array($gradosAcademicos)) {
+    $gradosAcademicos = [];
+}
 
 // =====================================
 // OBTENER CURSOS SEGUN TIPO
@@ -274,7 +276,7 @@ $cursos = supabase_request(
             Grado Académico
         </label>
 
-       <select
+<select
     name="grado_academico_id"
     class="input-form"
     required
@@ -284,13 +286,27 @@ $cursos = supabase_request(
         Seleccione
     </option>
 
-    <?php foreach($gradosAcademicos as $grado): ?>
+    <?php if (!empty($gradosAcademicos)): ?>
 
-        <option value="<?= $grado['id'] ?>">
-            <?= htmlspecialchars($grado['nombre_grado']) ?>
+        <?php foreach ($gradosAcademicos as $grado): ?>
+
+            <option value="<?= (int)($grado['id'] ?? 0) ?>">
+
+                <?= htmlspecialchars(
+                    $grado['nombre_grado'] ?? 'Sin nombre'
+                ) ?>
+
+            </option>
+
+        <?php endforeach; ?>
+
+    <?php else: ?>
+
+        <option value="">
+            No hay grados académicos
         </option>
 
-    <?php endforeach; ?>
+    <?php endif; ?>
 
 </select>
     </div>
