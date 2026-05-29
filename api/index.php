@@ -415,7 +415,7 @@ $cursos = supabase_request(
         </option>
 
         <option value="Comunidad">
-            Comunidad
+            Comunidad WhatsApp
         </option>
 
     </select>
