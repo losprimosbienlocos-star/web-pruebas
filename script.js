@@ -242,12 +242,7 @@ const regionNames = typeof Intl !== "undefined" && Intl.DisplayNames
 const countries = countryCodes
     .map((code) => ({
         code,
-        name: countryNameOverrides[code] || regionNames?.of(code) || code,
-        flag: code
-            .toUpperCase()
-            .replace(/./g, (char) =>
-                String.fromCodePoint(127397 + char.charCodeAt(0))
-            )
+        name: countryNameOverrides[code] || regionNames?.of(code) || code
     }))
     .sort((a, b) => a.name.localeCompare(b.name, "es"));
 
@@ -266,17 +261,23 @@ function initCountryCombobox() {
         input.setAttribute("aria-expanded", expanded ? "true" : "false");
     };
 
+    const setSelectedFlag = (country) => {
+        selectedFlag.className = country
+            ? `fi fi-${country.code.toLowerCase()} country-selected-flag`
+            : "country-selected-flag country-selected-placeholder";
+    };
+
     const updateSelectedFlag = () => {
         const country = countries.find(
             (item) => item.name === input.value
         );
 
-        selectedFlag.textContent = country?.flag || "🌎";
+        setSelectedFlag(country);
     };
 
     const selectCountry = (country) => {
         input.value = country.name;
-        selectedFlag.textContent = country.flag;
+        setSelectedFlag(country);
         setExpanded(false);
         saveFormDraft();
         input.focus();
@@ -286,7 +287,8 @@ function initCountryCombobox() {
         const query = normalizarTextoBusqueda(input.value);
         const matches = countries
             .filter((country) =>
-                normalizarTextoBusqueda(country.name).includes(query)
+                normalizarTextoBusqueda(country.name).includes(query) ||
+                normalizarTextoBusqueda(country.code).includes(query)
             )
             .slice(0, 80);
 
@@ -307,8 +309,9 @@ function initCountryCombobox() {
             option.setAttribute("role", "option");
             option.dataset.countryName = country.name;
             option.innerHTML = `
-                <span class="country-option-flag" aria-hidden="true">${country.flag}</span>
-                <span>${country.name}</span>
+                <span class="fi fi-${country.code.toLowerCase()} country-option-flag" aria-hidden="true"></span>
+                <span class="country-option-name">${country.name}</span>
+                <span class="country-option-code">${country.code}</span>
             `;
 
             option.addEventListener("click", () => {

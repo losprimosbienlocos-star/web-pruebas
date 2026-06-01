@@ -57,18 +57,44 @@ body{
 }
 
 .country-input{
-    padding-left: 50px;
+    padding-left: 64px;
     padding-right: 48px;
 }
 
 .country-selected-flag{
     position: absolute;
-    left: 14px;
+    left: 16px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 2;
-    font-size: 22px;
-    line-height: 1;
+    width: 30px;
+    height: 22px;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px rgba(0,59,47,.12);
+}
+
+.country-selected-placeholder{
+    border: 2px solid #73bc25;
+    border-radius: 50%;
+    box-shadow: none;
+}
+
+.country-selected-placeholder::before{
+    content: "";
+    position: absolute;
+    inset: 5px 2px;
+    border-top: 2px solid #73bc25;
+    border-bottom: 2px solid #73bc25;
+    border-radius: 50%;
+}
+
+.country-selected-placeholder::after{
+    content: "";
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    left: 50%;
+    border-left: 2px solid #73bc25;
 }
 
 .country-dropdown-toggle{
@@ -124,8 +150,22 @@ body{
 }
 
 .country-option-flag{
-    font-size: 22px;
-    line-height: 1;
+    width: 28px;
+    height: 20px;
+    flex: 0 0 28px;
+    border-radius: 3px;
+    box-shadow: 0 0 0 1px rgba(0,59,47,.12);
+}
+
+.country-option-name{
+    flex: 1;
+}
+
+.country-option-code{
+    color: #73bc25;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .04em;
 }
 
 .country-empty{

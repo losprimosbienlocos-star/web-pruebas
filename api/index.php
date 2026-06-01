@@ -76,6 +76,8 @@ $cursos = supabase_request(
 
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css">
+
     <link rel="stylesheet" href="styles.css">
 
     <script>
@@ -266,9 +268,7 @@ $cursos = supabase_request(
         </label>
 
         <div class="country-input-shell">
-            <span id="countrySelectedFlag" class="country-selected-flag" aria-hidden="true">
-                🌎
-            </span>
+            <span id="countrySelectedFlag" class="country-selected-flag" aria-hidden="true"></span>
 
             <input
                 type="text"
