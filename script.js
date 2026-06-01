@@ -388,6 +388,7 @@ function filtrarCursos() {
             );
 
             const coincideTipo =
+                busqueda !== "" ||
                 card.dataset.cursoTipo === tipoCapacitacionActual;
 
             const coincideBusqueda =

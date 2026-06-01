@@ -34,6 +34,12 @@ body{
     color: #003b2f;
 }
 
+@media(min-width:768px){
+    .identity-grid .label-form{
+        min-height: 44px;
+    }
+}
+
 input.input-form,
 select.input-form,
 textarea.input-form{
