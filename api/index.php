@@ -554,10 +554,11 @@ Marque una o más opciones según sus necesidades de formación y desarrollo pro
 
                 <div class="mt-8">
 
-                    <label id="tipoCursoLabel" class="label-form mb-4 block">
-                        <?= $tipo ?>
-                    </label>
-
+                    <!--<label id="tipoCursoLabel" class="label-form mb-4 block">
+                        <<?= $tipo ?>-->
+                   <!-- </label>
+                       -->
+            
                     <div class="relative mb-4">
                         <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                             search
