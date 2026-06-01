@@ -689,11 +689,11 @@ $cursos = supabase_request(
 
                 <div class="p-5">
 
-                    <h3 class="font-bold text-xl text-primary mb-4">
-                        Cengicaña Digital 
-                        Para Inscribirte A Los Cursos Que Quieras
-                    </h3>
 
+
+<h3 class="mx-auto text-center font-bold text-xl leading-relaxed max-w-[380px]">
+    Completa el siguiente formulario para formalizar tu registro en nuestros programas de formación especializada.
+</h3>
                     
 
                 </div>
