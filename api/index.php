@@ -678,15 +678,27 @@ $cursos = supabase_request(
                     </div>
 
                 </div>
+            </div>
 
-<div class="bg-white rounded-2xl shadow-md overflow-hidden"> 
-    <img src="css/images/cengi.png" class="w-40 mx-auto object-contain py-4" > 
-    <div class="p-5"> 
-        <h3 class="font-bold text-xl text-secondary mb-4 text-center"> 
-            Completa el siguiente formulario para formalizar tu registro en nuestros programas de formación especializada. 
-        </h3>
-     </div> 
-    </div>
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+
+                <img
+                    src="css/images/cengi.png"
+                    class="w-40 mx-auto object-contain py-4"
+                >
+
+                <div class="p-5">
+
+                    <h3 class="font-bold text-xl text-primary mb-4">
+                        Cengicaña Digital 
+                        Para Inscribirte A Los Cursos Que Quieras
+                    </h3>
+
+                    
+
+                </div>
+
+            </div>
 
         </aside>
 
