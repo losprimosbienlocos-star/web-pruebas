@@ -294,9 +294,9 @@ try {
             theme: {
                 extend: {
                     colors: {
-                        primary: "#03251d",
-                        secondary: "#326b00",
-                        background: "#f4f7f6",
+                        primary: "#003b2f",
+                        secondary: "#73bc25",
+                        background: "#f7fbf2",
                         surface: "#ffffff"
                     },
                     fontFamily: {
@@ -318,7 +318,7 @@ try {
             position: relative;
             border-radius: 50%;
             box-sizing: content-box;
-            border: 4px solid #4CAF50;
+            border: 4px solid #73bc25;
         }
         .check-icon::after {
             content: '';
@@ -327,7 +327,7 @@ try {
             top: 14px;
             width: 16px;
             height: 32px;
-            border: solid #4CAF50;
+            border: solid #73bc25;
             border-width: 0 4px 4px 0;
             transform: rotate(45deg);
         }

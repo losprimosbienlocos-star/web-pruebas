@@ -68,7 +68,7 @@ $cursos = supabase_request(
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <title>Solicitud de Inscripción</title>
+    <title>Solicitud de Inscripción Digital</title>
 
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
 
@@ -83,12 +83,12 @@ $cursos = supabase_request(
             theme: {
                 extend: {
                     colors: {
-                        primary: "#03251d",
-                        secondary: "#326b00",
-                        background: "#f8f9ff",
+                        primary: "#003b2f",
+                        secondary: "#73bc25",
+                        background: "#f7fbf2",
                         surface: "#ffffff",
-                        outline: "#c1c8c4",
-                        container: "#eff4ff"
+                        outline: "#cfe6bf",
+                        container: "#eef8e4"
                     },
                     fontFamily: {
                         body: ["Montserrat"]
@@ -118,11 +118,11 @@ $cursos = supabase_request(
         <div class="text-white max-w-2xl">
 
             <h2 class="text-4xl md:text-6xl font-extrabold mb-4">
-                Solicitud de Inscripción
+                Solicitud de <span class="text-secondary">Inscripción Digital</span>
             </h2>
 
             <p class="text-lg md:text-xl text-white/90">
-                Gestión moderna de capacitaciones industriales y agrícolas.
+                Innovación y Capacitación Agrícola e Industrial | Cengicaña Digital
             </p>
 
         </div>
@@ -487,7 +487,7 @@ $cursos = supabase_request(
                         <button
                             type="button"
                             data-tipo-capacitacion="Curso"
-                            class="tipo-capacitacion-btn px-5 py-2 rounded-xl bg-green-600 text-white font-semibold shadow hover:scale-105 transition"
+                            class="tipo-capacitacion-btn px-5 py-2 rounded-xl bg-secondary text-white font-semibold shadow hover:scale-105 transition"
                         >
                             Cursos
                         </button>
@@ -495,7 +495,7 @@ $cursos = supabase_request(
                         <button
                             type="button"
                             data-tipo-capacitacion="Diplomado"
-                            class="tipo-capacitacion-btn px-5 py-2 rounded-xl bg-blue-600 text-white font-semibold shadow hover:scale-105 transition"
+                            class="tipo-capacitacion-btn px-5 py-2 rounded-xl bg-[#5fa61f] text-white font-semibold shadow hover:scale-105 transition"
                         >
                             Diplomados
                         </button>
@@ -503,7 +503,7 @@ $cursos = supabase_request(
                         <button
                             type="button"
                             data-tipo-capacitacion="Seminario"
-                            class="tipo-capacitacion-btn px-5 py-2 rounded-xl bg-yellow-500 text-white font-semibold shadow hover:scale-105 transition"
+                            class="tipo-capacitacion-btn px-5 py-2 rounded-xl bg-[#4d8f1b] text-white font-semibold shadow hover:scale-105 transition"
                         >
                             Seminarios
                         </button>
@@ -645,7 +645,7 @@ $cursos = supabase_request(
                             check_circle
                         </span>
 
-                        <p>Capacitación especializada.</p>
+                        <p>Tu Futuro Profesional Comienza Aquí</p>
                     </div>
 
                 </div>
@@ -662,8 +662,7 @@ $cursos = supabase_request(
                 <div class="p-5">
 
                     <h3 class="font-bold text-xl text-primary mb-4">
-                        Cengicaña Digital 
-                        Para Inscribirte A Los Cursos Que Quieras
+                        Completa el siguiente formulario para formalizar tu registro en nuestros programas de formación especializada.
                     </h3>
 
                     

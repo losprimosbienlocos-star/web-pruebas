@@ -21,8 +21,8 @@ body{
     inset: 0;
     background: linear-gradient(
         to right,
-        rgba(3,37,29,.9),
-        rgba(3,37,29,.2)
+        rgba(0,59,47,.92),
+        rgba(115,188,37,.18)
     );
 }
 
@@ -31,7 +31,7 @@ body{
     font-weight: 700;
     margin-bottom: 8px;
     display: block;
-    color: #03251d;
+    color: #003b2f;
 }
 
 .input-form{
@@ -44,8 +44,8 @@ body{
 }
 
 .input-form:focus{
-    border-color: #326b00;
-    box-shadow: 0 0 0 4px rgba(50,107,0,.1);
+    border-color: #73bc25;
+    box-shadow: 0 0 0 4px rgba(115,188,37,.14);
 }
 
 .card-option{
@@ -61,8 +61,8 @@ body{
 }
 
 .card-option:hover{
-    border-color: #326b00;
-    background: #f4fff0;
+    border-color: #73bc25;
+    background: #f5faef;
 }
 
 .curso-card{
@@ -78,7 +78,7 @@ body{
 }
 
 .curso-card:hover{
-    border-color: #326b00;
+    border-color: #73bc25;
     transform: translateY(-2px);
 }
 
@@ -89,7 +89,7 @@ body{
 
 .btn-submit{
     width: 100%;
-    background: #03251d;
+    background: #003b2f;
     color: white;
     border: none;
     padding: 16px;
@@ -104,12 +104,12 @@ body{
 }
 
 .btn-submit:hover{
-    background: #326b00;
+    background: #73bc25;
     transform: translateY(-2px);
 }
 
 .sidebar-card-primary{
-    background: #03251d;
+    background: #003b2f;
     color: white;
     padding: 30px;
     border-radius: 24px;
