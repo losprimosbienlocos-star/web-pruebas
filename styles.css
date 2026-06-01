@@ -47,6 +47,24 @@ textarea.input-form{
     background: #ffffff;
 }
 
+select.input-form{
+    appearance: none;
+    padding-right: 48px !important;
+    background-color: #ffffff;
+    background-image:
+        linear-gradient(45deg, transparent 50%, #003b2f 50%),
+        linear-gradient(135deg, #003b2f 50%, transparent 50%);
+    background-position:
+        calc(100% - 24px) 50%,
+        calc(100% - 16px) 50%;
+    background-size: 8px 8px, 8px 8px;
+    background-repeat: no-repeat;
+}
+
+.search-input{
+    padding-left: 52px !important;
+}
+
 input.input-form:focus,
 select.input-form:focus,
 textarea.input-form:focus{
@@ -65,10 +83,14 @@ textarea.input-form:focus{
     border-radius: 16px;
     background: #ffffff;
     display: grid;
-    grid-template-columns: 56px minmax(0, 1fr) 44px;
+    grid-template-columns: minmax(0, 1fr) 44px;
     align-items: center;
     overflow: hidden;
     transition: .3s;
+}
+
+.country-input-shell.has-country-flag{
+    grid-template-columns: 56px minmax(0, 1fr) 44px;
 }
 
 .country-input-shell:focus-within{
@@ -86,6 +108,7 @@ textarea.input-form:focus{
 }
 
 .country-selected-flag{
+    display: none;
     justify-self: center;
     width: 30px;
     height: 22px;
@@ -93,28 +116,8 @@ textarea.input-form:focus{
     box-shadow: 0 0 0 1px rgba(0,59,47,.12);
 }
 
-.country-selected-placeholder{
-    border: 2px solid #73bc25;
-    border-radius: 50%;
-    box-shadow: none;
-}
-
-.country-selected-placeholder::before{
-    content: "";
-    position: absolute;
-    inset: 5px 2px;
-    border-top: 2px solid #73bc25;
-    border-bottom: 2px solid #73bc25;
-    border-radius: 50%;
-}
-
-.country-selected-placeholder::after{
-    content: "";
-    position: absolute;
-    top: 2px;
-    bottom: 2px;
-    left: 50%;
-    border-left: 2px solid #73bc25;
+.country-input-shell.has-country-flag .country-selected-flag{
+    display: block;
 }
 
 .country-dropdown-toggle{

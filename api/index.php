@@ -557,7 +557,7 @@ $cursos = supabase_request(
                         <input
                             type="search"
                             id="buscadorCursos"
-                            class="input-form pl-12"
+                            class="input-form search-input"
                             placeholder="Buscar curso, diplomado o seminario"
                             autocomplete="off"
                         >

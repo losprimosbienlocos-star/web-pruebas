@@ -262,9 +262,14 @@ function initCountryCombobox() {
     };
 
     const setSelectedFlag = (country) => {
+        selectedFlag.parentElement?.classList.toggle(
+            "has-country-flag",
+            Boolean(country)
+        );
+
         selectedFlag.className = country
             ? `fi fi-${country.code.toLowerCase()} country-selected-flag`
-            : "country-selected-flag country-selected-placeholder";
+            : "country-selected-flag";
     };
 
     const updateSelectedFlag = () => {
