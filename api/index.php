@@ -541,7 +541,15 @@ $cursos = supabase_request(
 
                 </div>
 
+<div class="mt-6 mb-4">
+    <h3 class="text-xl font-bold text-primary">
+Seleccione el curso de su interés
+    </h3>
 
+    <p class="text-sm text-gray-500 mt-1">
+Marque una o más opciones según sus necesidades de formación y desarrollo profesional.
+    </p>
+</div>
                 <!-- CURSOS -->
 
                 <div class="mt-8">
