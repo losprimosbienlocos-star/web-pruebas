@@ -639,13 +639,6 @@ $cursos = supabase_request(
 
                 <div class="space-y-3 text-sm">
 
-                    <div class="flex gap-2">
-                        <span class="material-symbols-outlined">
-                            check_circle
-                        </span>
-
-                        <p>Certificación avalada.</p>
-                    </div>
 
                     <div class="flex gap-2">
                         <span class="material-symbols-outlined">
@@ -669,8 +662,8 @@ $cursos = supabase_request(
                 <div class="p-5">
 
                     <h3 class="font-bold text-xl text-primary mb-4">
-                        CENGICAÑA DIGITAL 
-                        PARA INSCRIBIRTE A LOS CURSOS QUE QUIERAS
+                        Cengicaña Digital 
+                        Para Inscribirte A Los Cursos Que Quieras
                     </h3>
 
                     

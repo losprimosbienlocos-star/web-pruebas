@@ -206,6 +206,79 @@ if (!empty($grado_academico_id)) {
 }
 
 $mysqli->close();
+require_once __DIR__ . '/correo.php';
+
+function esGuatemala($pais)
+{
+    $pais = mb_strtolower(
+        trim($pais),
+        'UTF-8'
+    );
+
+    return in_array(
+        $pais,
+        [
+            'guatemala',
+            'guate',
+            'gt'
+        ]
+    );
+}
+
+if ($tipo_pago === 'Ingenio') {
+
+    $template =
+        __DIR__
+        . '/templates/pago_ingenio.html';
+
+}
+elseif (
+    $tipo_pago === 'Propio'
+    &&
+    esGuatemala($pais)
+) {
+
+    $template =
+        __DIR__
+        . '/templates/pago_propio_nacional.html';
+
+}
+else {
+
+    $template =
+        __DIR__
+        . '/templates/pago_propio_internacional.html';
+}
+
+$htmlCorreo =
+    file_get_contents($template);
+
+$htmlCorreo =
+    str_replace(
+        '@NOMBRE',
+        htmlspecialchars(
+            $nombre_participante
+        ),
+        $htmlCorreo
+    );
+
+try {
+
+    enviarCorreoHTML(
+        $correo,
+        $nombre_participante,
+        'Confirmación de inscripción',
+        $htmlCorreo
+    );
+
+} catch (Throwable $e) {
+
+    error_log(
+        'Error correo: '
+        . $e->getMessage()
+    );
+
+}
 ?>
 <!DOCTYPE html>
 <html class="light" lang="es">
