@@ -48,6 +48,92 @@ body{
     box-shadow: 0 0 0 4px rgba(115,188,37,.14);
 }
 
+.country-combobox{
+    position: relative;
+}
+
+.country-input-shell{
+    position: relative;
+}
+
+.country-input{
+    padding-left: 50px;
+    padding-right: 48px;
+}
+
+.country-selected-flag{
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    font-size: 22px;
+    line-height: 1;
+}
+
+.country-dropdown-toggle{
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #003b2f;
+    border: 0;
+    background: transparent;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.country-dropdown{
+    position: absolute;
+    z-index: 30;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    max-height: 260px;
+    overflow-y: auto;
+    background: #ffffff;
+    border: 1px solid #cfe6bf;
+    border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(0,59,47,.16);
+    padding: 8px;
+}
+
+.country-option{
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: #003b2f;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    font-weight: 600;
+}
+
+.country-option:hover,
+.country-option:focus{
+    background: #f5faef;
+    outline: none;
+}
+
+.country-option-flag{
+    font-size: 22px;
+    line-height: 1;
+}
+
+.country-empty{
+    color: #6b7280;
+    font-size: 14px;
+    padding: 12px;
+}
+
 .card-option{
     border: 1px solid #d1d5db;
     padding: 14px;

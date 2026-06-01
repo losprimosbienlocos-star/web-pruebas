@@ -177,6 +177,197 @@ function normalizarTextoBusqueda(texto) {
         .trim();
 }
 
+
+// ======================================
+// SELECTOR DE PAISES
+// ======================================
+
+const countryCodes = `
+    AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ
+    BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ
+    CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ
+    DE DJ DK DM DO DZ
+    EC EE EG EH ER ES ET
+    FI FJ FK FM FO FR
+    GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY
+    HK HM HN HR HT HU
+    ID IE IL IM IN IO IQ IR IS IT
+    JE JM JO JP
+    KE KG KH KI KM KN KP KR KW KY KZ
+    LA LB LC LI LK LR LS LT LU LV LY
+    MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ
+    NA NC NE NF NG NI NL NO NP NR NU NZ
+    OM
+    PA PE PF PG PH PK PL PM PN PR PS PT PW PY
+    QA
+    RE RO RS RU RW
+    SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ
+    TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ
+    UA UG UM US UY UZ
+    VA VC VE VG VI VN VU
+    WF WS
+    YE YT
+    ZA ZM ZW
+`
+    .trim()
+    .split(/\s+/);
+
+const countryNameOverrides = {
+    BO: "Bolivia",
+    BQ: "Caribe Neerlandés",
+    CD: "República Democrática del Congo",
+    CI: "Costa de Marfil",
+    FK: "Islas Malvinas",
+    GB: "Reino Unido",
+    IR: "Irán",
+    KP: "Corea del Norte",
+    KR: "Corea del Sur",
+    LA: "Laos",
+    MD: "Moldavia",
+    MK: "Macedonia del Norte",
+    PS: "Palestina",
+    RU: "Rusia",
+    SY: "Siria",
+    TZ: "Tanzania",
+    US: "Estados Unidos",
+    VA: "Ciudad del Vaticano",
+    VE: "Venezuela",
+    VN: "Vietnam"
+};
+
+const regionNames = typeof Intl !== "undefined" && Intl.DisplayNames
+    ? new Intl.DisplayNames(["es"], { type: "region" })
+    : null;
+
+const countries = countryCodes
+    .map((code) => ({
+        code,
+        name: countryNameOverrides[code] || regionNames?.of(code) || code,
+        flag: code
+            .toUpperCase()
+            .replace(/./g, (char) =>
+                String.fromCodePoint(127397 + char.charCodeAt(0))
+            )
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name, "es"));
+
+function initCountryCombobox() {
+    const input = document.getElementById("pais");
+    const dropdown = document.getElementById("countryDropdown");
+    const toggle = document.getElementById("countryDropdownToggle");
+    const selectedFlag = document.getElementById("countrySelectedFlag");
+
+    if (!input || !dropdown || !toggle || !selectedFlag) {
+        return;
+    }
+
+    const setExpanded = (expanded) => {
+        dropdown.classList.toggle("hidden", !expanded);
+        input.setAttribute("aria-expanded", expanded ? "true" : "false");
+    };
+
+    const updateSelectedFlag = () => {
+        const country = countries.find(
+            (item) => item.name === input.value
+        );
+
+        selectedFlag.textContent = country?.flag || "🌎";
+    };
+
+    const selectCountry = (country) => {
+        input.value = country.name;
+        selectedFlag.textContent = country.flag;
+        setExpanded(false);
+        saveFormDraft();
+        input.focus();
+    };
+
+    const renderOptions = () => {
+        const query = normalizarTextoBusqueda(input.value);
+        const matches = countries
+            .filter((country) =>
+                normalizarTextoBusqueda(country.name).includes(query)
+            )
+            .slice(0, 80);
+
+        dropdown.innerHTML = "";
+
+        if (matches.length === 0) {
+            const empty = document.createElement("div");
+            empty.className = "country-empty";
+            empty.textContent = "No se encontró ese país.";
+            dropdown.appendChild(empty);
+            return;
+        }
+
+        matches.forEach((country) => {
+            const option = document.createElement("button");
+            option.type = "button";
+            option.className = "country-option";
+            option.setAttribute("role", "option");
+            option.dataset.countryName = country.name;
+            option.innerHTML = `
+                <span class="country-option-flag" aria-hidden="true">${country.flag}</span>
+                <span>${country.name}</span>
+            `;
+
+            option.addEventListener("click", () => {
+                selectCountry(country);
+            });
+
+            dropdown.appendChild(option);
+        });
+    };
+
+    const openDropdown = () => {
+        renderOptions();
+        setExpanded(true);
+    };
+
+    input.addEventListener("focus", openDropdown);
+
+    input.addEventListener("input", () => {
+        updateSelectedFlag();
+        renderOptions();
+        setExpanded(true);
+    });
+
+    input.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            setExpanded(false);
+            return;
+        }
+
+        if (event.key !== "Enter") {
+            return;
+        }
+
+        const firstOption = dropdown.querySelector(".country-option");
+
+        if (!dropdown.classList.contains("hidden") && firstOption) {
+            event.preventDefault();
+            firstOption.click();
+        }
+    });
+
+    toggle.addEventListener("click", () => {
+        if (dropdown.classList.contains("hidden")) {
+            input.focus();
+            openDropdown();
+        } else {
+            setExpanded(false);
+        }
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!event.target.closest(".country-combobox")) {
+            setExpanded(false);
+        }
+    });
+
+    updateSelectedFlag();
+}
+
 function filtrarCursos() {
     const busqueda = normalizarTextoBusqueda(
         document.getElementById("buscadorCursos")?.value || ""
@@ -242,6 +433,8 @@ document.addEventListener(
     function () {
 
         restoreFormDraft();
+
+        initCountryCombobox();
 
         toggleOtroIngenio();
 

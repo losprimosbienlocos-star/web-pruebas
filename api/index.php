@@ -260,17 +260,46 @@ $cursos = supabase_request(
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
 
-    <div>
-        <label class="label-form">
+    <div class="country-combobox">
+        <label class="label-form" for="pais">
             País
         </label>
 
-        <input
-            type="text"
-            name="pais"
-            class="input-form"
-            required
-        >
+        <div class="country-input-shell">
+            <span id="countrySelectedFlag" class="country-selected-flag" aria-hidden="true">
+                🌎
+            </span>
+
+            <input
+                type="text"
+                name="pais"
+                id="pais"
+                class="input-form country-input"
+                placeholder="Seleccione o busque un país"
+                autocomplete="off"
+                role="combobox"
+                aria-expanded="false"
+                aria-controls="countryDropdown"
+                required
+            >
+
+            <button
+                type="button"
+                id="countryDropdownToggle"
+                class="country-dropdown-toggle"
+                aria-label="Mostrar países"
+            >
+                <span class="material-symbols-outlined">
+                    expand_more
+                </span>
+            </button>
+        </div>
+
+        <div
+            id="countryDropdown"
+            class="country-dropdown hidden"
+            role="listbox"
+        ></div>
     </div>
 
     <div>
