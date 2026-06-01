@@ -34,18 +34,24 @@ body{
     color: #003b2f;
 }
 
-.input-form{
+input.input-form,
+select.input-form,
+textarea.input-form{
     width: 100%;
-    border: 1px solid #d1d5db;
-    border-radius: 12px;
-    padding: 14px;
+    min-height: 54px;
+    border: 1px solid #cbd5d1 !important;
+    border-radius: 16px !important;
+    padding: 14px 16px;
     outline: none;
     transition: .3s;
+    background: #ffffff;
 }
 
-.input-form:focus{
-    border-color: #73bc25;
-    box-shadow: 0 0 0 4px rgba(115,188,37,.14);
+input.input-form:focus,
+select.input-form:focus,
+textarea.input-form:focus{
+    border-color: #73bc25 !important;
+    box-shadow: 0 0 0 4px rgba(115,188,37,.14) !important;
 }
 
 .country-combobox{
@@ -54,19 +60,33 @@ body{
 
 .country-input-shell{
     position: relative;
+    min-height: 54px;
+    border: 1px solid #cbd5d1;
+    border-radius: 16px;
+    background: #ffffff;
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) 44px;
+    align-items: center;
+    overflow: hidden;
+    transition: .3s;
+}
+
+.country-input-shell:focus-within{
+    border-color: #73bc25;
+    box-shadow: 0 0 0 4px rgba(115,188,37,.14);
 }
 
 .country-input{
-    padding-left: 64px;
-    padding-right: 48px;
+    min-height: 52px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    padding: 14px 8px !important;
+    box-shadow: none !important;
+    background: transparent !important;
 }
 
 .country-selected-flag{
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 2;
+    justify-self: center;
     width: 30px;
     height: 22px;
     border-radius: 4px;
@@ -98,15 +118,11 @@ body{
 }
 
 .country-dropdown-toggle{
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
     color: #003b2f;
     border: 0;
     background: transparent;
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 52px;
     display: flex;
     align-items: center;
     justify-content: center;
