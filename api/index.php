@@ -679,21 +679,20 @@ $cursos = supabase_request(
 
                 </div>
 
-          <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+         <div class="bg-white rounded-2xl shadow-md overflow-hidden"> 
+             <img src="css/images/cengi.png" 
+                 class="w-40 mx-auto object-contain py-4" > 
+        
+             <div class="p-5 flex justify-center">
+    
+                 <h3 class="font-bold text-xl text-secondary text-center max-w-md">
+        
+                     Completa el siguiente formulario para formalizar tu registro en nuestros programas de formación especializada.
+    
+                 </h3>
 
-    <img
-        src="css/images/cengi.png"
-        class="w-40 mx-auto object-contain py-4"
-        alt="Cengicaña"
-    >
-
-    <div class="px-6 pb-6">
-        <h3 class="font-bold text-2xl text-center text-lime-500 leading-relaxed">
-            Completa el siguiente formulario para formalizar tu registro en nuestros programas de formación especializada.
-        </h3>
-    </div>
-
-</div>
+             </div>
+         </div>
 
         </aside>
 
