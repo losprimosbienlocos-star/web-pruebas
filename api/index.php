@@ -689,7 +689,15 @@ $cursos = supabase_request(
 
                 <div class="p-5">
 
-<h3 class="mx-auto max-w-[390px] text-center font-extrabold text-[22px] leading-[1.45] tracking-normal text-[#73C943]">
+                    <h3
+    class="mx-auto text-center font-extrabold text-[#73C943]"
+    style="
+        font-family: 'Poppins', sans-serif;
+        font-size: 22px;
+        line-height: 1.4;
+        max-width: 550px;
+    "
+>
     Completa el siguiente formulario para formalizar tu registro en nuestros programas de formación especializada.
 </h3>
                     
