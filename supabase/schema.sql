@@ -224,7 +224,9 @@ create policy "lectura publica solicitudes" on public.solicitudes_inscripcion fo
 create policy "insert publico solicitudes" on public.solicitudes_inscripcion for insert to anon, authenticated with check (true);
 
 grant usage on schema public to anon, authenticated, service_role;
+revoke all on all tables in schema public from anon, authenticated;
 grant select on public.ingenios to anon, authenticated, service_role;
+grant select on public.categorias_cursos to anon, authenticated, service_role;
 grant select on public.grado_academico to anon, authenticated, service_role;
 grant select on public.cursos to anon, authenticated, service_role;
 grant select, insert on public.solicitudes_inscripcion to anon, authenticated, service_role;
