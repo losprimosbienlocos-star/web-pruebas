@@ -11,7 +11,7 @@
     },
         {
       "src": "/Public/(.*)",
-      "dest": "/Public/$1"
+      "dest": "/Public/imagen.png"
     },
 
     {
