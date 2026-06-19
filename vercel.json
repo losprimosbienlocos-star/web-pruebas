@@ -9,6 +9,11 @@
     {
       "handle": "filesystem"
     },
+        {
+      "src": "/Public/(.*)",
+      "dest": "/Public/$1"
+    },
+
     {
       "src": "/admin/?",
       "dest": "/api/registros.php"
